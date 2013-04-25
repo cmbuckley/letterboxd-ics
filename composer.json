@@ -1,0 +1,37 @@
+{
+    "name": "starsquare/letterboxd-ics",
+    "description": "Export Letterboxd diary to iCalendar format",
+    "version": "0.1.0",
+    "type": "library",
+    "keywords": ["letterboxd", "calendar", "ical", "ics"],
+    "homepage": "https://starsquare.github.com/letterboxd-ics",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Chris Buckley",
+            "email": "chris@cmbuckley.co.uk",
+            "homepage": "http://cmbuckley.co.uk"
+        }
+    ],
+    "support": {
+        "email": "letterboxd-ics@starsquare.co.uk",
+        "issues": "https://github.com/starsquare/letterboxd-ics/issues",
+        "source": "https://github.com/starsquare/letterboxd-ics"
+    },
+    "require": {
+        "php": ">=5.3.0",
+        "kriswallsmith/buzz": ">=0.9",
+        "eluceo/ical": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "Letterboxd": "src/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/starsquare/iCal"
+        }
+    ]
+}
