@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "type": "library",
     "keywords": ["letterboxd", "calendar", "ical", "ics"],
-    "homepage": "https://starsquare.github.com/letterboxd-ics",
+    "homepage": "http://starsquare.github.io/letterboxd-ics/",
     "license": "MIT",
     "authors": [
         {
@@ -22,11 +22,6 @@
         "php": ">=5.3.0",
         "kriswallsmith/buzz": ">=0.9",
         "eluceo/ical": "dev-master"
-    },
-    "autoload": {
-        "psr-0": {
-            "Letterboxd": "src/"
-        }
     },
     "repositories": [
         {
