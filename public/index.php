@@ -9,7 +9,7 @@ use Buzz\Util\CookieJar;
 use Eluceo\iCal\Component\Calendar;
 use Eluceo\iCal\Component\Event;
 
-$version = 0.1;
+$version = 0.2;
 $phpVersion = phpversion();
 $buzzVersion = '0.0';
 

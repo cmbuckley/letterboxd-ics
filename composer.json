@@ -1,7 +1,7 @@
 {
     "name": "starsquare/letterboxd-ics",
     "description": "Export Letterboxd diary to iCalendar format",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "type": "library",
     "keywords": ["letterboxd", "calendar", "ical", "ics"],
     "homepage": "http://starsquare.github.io/letterboxd-ics/",
@@ -22,11 +22,5 @@
         "php": ">=5.3.0",
         "kriswallsmith/buzz": ">=0.9",
         "eluceo/ical": "dev-master"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/starsquare/iCal"
-        }
-    ]
+    }
 }
