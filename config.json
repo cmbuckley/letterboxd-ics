@@ -1,0 +1,11 @@
+{
+    "auth": {
+        "username": "user@example.com",
+        "password": "password"
+    },
+
+    "calendar": {
+        "name": "Films",
+        "timezone": "Europe/London"
+    }
+}
