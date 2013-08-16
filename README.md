@@ -24,7 +24,7 @@ so it can be specified as a dependency using [Composer](http://getcomposer.org):
 ```json
 {
     "require": {
-        "starsquare/letterboxd-ics": "1.0.0"
+        "starsquare/letterboxd-ics": "2.0.0"
     }
 }
 ```

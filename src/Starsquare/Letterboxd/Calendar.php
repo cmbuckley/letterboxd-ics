@@ -2,7 +2,6 @@
 
 namespace Starsquare\Letterboxd;
 
-use Buzz\Browser;
 use Buzz\Message\RequestInterface;
 use Buzz\Util\CookieJar;
 
@@ -13,8 +12,11 @@ class Calendar extends BaseCalendar {
     const VERSION = '1.0';
     const PROD_ID = '-//StarSquare//LETTERBOXD//%s//EN';
     const USER_AGENT = 'letterboxd-ics/%s (http://bux.re/letterboxd-ics) PHP/%s';
+    const CSRF_TOKEN = '__csrf';
+    const CSRF_PATTERN = '/name="%s" value="(?P<token>[^"]+)"/';
 
     protected $urls = array(
+        'home'   => 'http://letterboxd.com/',
         'login'  => 'http://letterboxd.com/user/login.do',
         'export' => 'http://letterboxd.com/data/export/',
     );
@@ -109,10 +111,40 @@ class Calendar extends BaseCalendar {
     protected function getBrowser() {
         if ($this->browser === null) {
             $this->browser = new Browser();
+            $this->browser->setDefaultHeaders(array(
+                'User-Agent' => $this->getUserAgent(),
+            ));
             $this->browser->getClient()->setCookieJar(new CookieJar);
         }
 
         return $this->browser;
+    }
+
+    protected function login() {
+        $browser = $this->getBrowser();
+        $home = $browser->get($this->urls['home']);
+        $content = $home->getContent();
+
+        if (!preg_match(sprintf(static::CSRF_PATTERN, static::CSRF_TOKEN), $content, $matches)) {
+            throw new Exception('Cannot log in: Cannot find CSRF token');
+        }
+
+        $auth = $this->options['auth'];
+        $auth[static::CSRF_TOKEN] = $matches['token'];
+
+        $loginResponse = $browser->submit($this->urls['login'], $auth, RequestInterface::METHOD_POST);
+
+        if (!$loginResponse->isOk()) {
+            throw new Exception('Cannot log in: Received HTTP ' . $loginResponse->getStatusCode());
+        }
+
+        if (($result = json_decode($loginResponse->getContent())) === null) {
+            throw new Exception('Cannot log in: Could not decode response as JSON');
+        }
+
+        if ($result->result === 'error') {
+            throw new Exception('Cannot log in: ' . $result->messages[0]);
+        }
     }
 
     protected function getFile() {
@@ -120,31 +152,9 @@ class Calendar extends BaseCalendar {
             if (isset($this->options['file'])) {
                 $this->file = $this->options['file'];
             } else {
-                $browser = $this->getBrowser();
+                $this->login();
 
-                $loginResponse = $browser->submit(
-                    $this->urls['login'],
-                    $this->options['auth'],
-                    RequestInterface::METHOD_POST,
-                    array('User-Agent' => $this->getUserAgent())
-                );
-
-                if (!$loginResponse->isOk()) {
-                    throw new Exception('Cannot log in: Received HTTP ' . $loginResponse->getStatusCode());
-                }
-
-                if (($result = json_decode($loginResponse->getContent())) === null) {
-                    throw new Exception('Cannot log in: Could not decode response as JSON');
-                }
-
-                if ($result->result === 'error') {
-                    throw new Exception('Cannot log in: ' . $result->messages[0]);
-                }
-
-                $export = $browser->get(
-                    $this->urls['export'],
-                    array('User-Agent' => $this->getUserAgent())
-                );
+                $export = $this->getBrowser()->get($this->urls['export']);
 
                 if (!$export->isOk()) {
                     throw new Exception('Cannot read export: Received HTTP ' . $export->getStatusCode());
