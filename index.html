@@ -33,13 +33,14 @@
         <p>letterboxd-ics is a package to render a <a href="http://letterboxd.com">Letterboxd</a>
 diary in iCalendar format.</p>
 
-<h1>How to install (standalone)</h1>
+<h1>
+<a name="how-to-install-standalone" class="anchor" href="#how-to-install-standalone"><span class="octicon octicon-link"></span></a>How to install (standalone)</h1>
 
 <p>If you want to use the standalone package, you can do the following:</p>
 
-<div class="highlight"><pre>git clone https://github.com/starsquare/letterboxd-ics.git
+<div class="highlight highlight-bash"><pre>git clone https://github.com/starsquare/letterboxd-ics.git
 <span class="nb">cd </span>letterboxd-ics
-curl -sS https://getcomposer.org/installer | php
+curl -sS https://getcomposer.org/installer <span class="p">|</span> php
 php composer.phar install
 </pre></div>
 
@@ -47,23 +48,25 @@ php composer.phar install
 to contain your Letterboxd credentials, and point a Web server at the <code>public</code>
 folder.</p>
 
-<h1>How to install (Packagist)</h1>
+<h1>
+<a name="how-to-install-packagist" class="anchor" href="#how-to-install-packagist"><span class="octicon octicon-link"></span></a>How to install (Packagist)</h1>
 
 <p>Alternatively, letterboxd-ics is <a href="https://packagist.org/packages/starsquare/letterboxd-ics">available on Packagist</a>,
 so it can be specified as a dependency using <a href="http://getcomposer.org">Composer</a>:</p>
 
-<div class="highlight"><pre><span class="p">{</span>
+<div class="highlight highlight-json"><pre><span class="p">{</span>
     <span class="nt">"require"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"starsquare/letterboxd-ics"</span><span class="p">:</span> <span class="s2">"1.0.0"</span>
+        <span class="nt">"starsquare/letterboxd-ics"</span><span class="p">:</span> <span class="s2">"~2.0"</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 
-<h1>How to use</h1>
+<h1>
+<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How to use</h1>
 
 <p>You can specify your own options:</p>
 
-<div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<div class="highlight highlight-php"><pre><span class="o">&lt;?</span><span class="nx">php</span>
 <span class="k">require</span> <span class="s1">'vendor/autoload.php'</span><span class="p">;</span>
 
 <span class="nv">$calendar</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Starsquare\Letterboxd\Calendar</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
@@ -105,7 +108,7 @@ config file, and pass the file path to the <code>Calendar</code> object. An exam
 provided in the <code>public</code> folder.</p>
       </section>
       <footer>
-        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
       </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
