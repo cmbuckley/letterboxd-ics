@@ -1,6 +1,8 @@
 letterboxd-ics is a package to render a [Letterboxd](http://letterboxd.com)
 diary in iCalendar format.
 
+[![Build Status](https://travis-ci.org/starsquare/letterboxd-ics.png)](https://travis-ci.org/starsquare/letterboxd-ics)
+
 # How to install (standalone)
 
 If you want to use the standalone package, you can do the following:
