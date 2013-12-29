@@ -175,11 +175,12 @@ class Calendar extends BaseCalendar {
 
     public function loadEvents() {
         if ($this->components === array()) {
-            $diary = fopen($this->getFile(), 'r');
+            $diary = @fopen($this->getFile(), 'r');
             $headers = null;
 
             if ($diary === false) {
-                throw new Exception("Cannot open file: $php_errormsg");
+                $error = error_get_last();
+                throw new Exception("Cannot find event file: " . $error['message']);
             }
 
             while (false !== ($row = fgetcsv($diary))) {
