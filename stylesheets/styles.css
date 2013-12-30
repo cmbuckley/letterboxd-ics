@@ -395,7 +395,7 @@ footer {
   }
 
 	footer {
-		margin: 0 0 0 30px;
+		margin: 10px 15px;
 	}
 
   header ul, header p.view {
@@ -408,15 +408,6 @@ footer {
   header ul li.download {
     display:none;
   }
-
-	footer {
-		margin: 0 0 0 20px;
-	}
-
-	footer a{
-		display:block;
-	}
-
 }
 
 @media print {
