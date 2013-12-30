@@ -374,16 +374,19 @@ footer {
 
 @media print, screen and (max-width: 720px) {
   body {
+    padding: 0;
     word-wrap:break-word;
   }
 
   header {
-    padding:10px 20px 0;
+    padding:10px 15px 0;
 		margin-right: 0;
+    margin-top: 0;
+    border-radius: 0;
   }
 
 	section {
-    padding:10px 0 10px 20px;
+    padding:10px 15px;
     margin:0 0 30px;
   }
 
