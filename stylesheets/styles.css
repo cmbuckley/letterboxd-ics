@@ -389,6 +389,10 @@ footer {
     border-radius: 0;
   }
 
+  header ul li.download {
+    display:none;
+  }
+
 	section {
     padding:10px 15px;
     margin:0 0 30px;
@@ -404,13 +408,6 @@ footer {
 
   header ul, header p.view {
     position:static;
-  }
-}
-
-@media print, screen and (max-width: 480px) {
-
-  header ul li.download {
-    display:none;
   }
 }
 
