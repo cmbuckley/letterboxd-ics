@@ -24,6 +24,10 @@ time, mark, audio, video {
 
 
 /* Base text styles */
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
 
 body {
   padding:10px 50px 0 0;
