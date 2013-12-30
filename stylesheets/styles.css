@@ -394,6 +394,10 @@ footer {
     margin:0 0 30px;
   }
 
+  pre {
+      font-size: 12px;
+  }
+
 	footer {
 		margin: 10px 15px;
 	}
