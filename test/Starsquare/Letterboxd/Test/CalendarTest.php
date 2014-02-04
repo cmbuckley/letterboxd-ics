@@ -44,7 +44,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
     protected function assertLogin($getResponse, $submitResponse = null) {
         $calendar = new CalendarStub();
 
-        $browser = $this->getMock('Starsquare\\Letterboxd\\Browser');
+        $browser = $this->getMock('Buzz\\Browser');
         $calendar->setBrowser($browser);
 
         $multiGet = ($getResponse instanceof \PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls);

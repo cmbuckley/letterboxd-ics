@@ -2,6 +2,8 @@
 
 namespace Starsquare\Letterboxd;
 
+use Buzz\Browser;
+use Buzz\Listener\CallbackListener;
 use Buzz\Message\RequestInterface;
 use Buzz\Util\CookieJar;
 
@@ -111,9 +113,15 @@ class Calendar extends BaseCalendar {
     protected function getBrowser() {
         if ($this->browser === null) {
             $this->browser = new Browser();
-            $this->browser->setDefaultHeaders(array(
-                'User-Agent' => $this->getUserAgent(),
-            ));
+
+            $this->browser->addListener(new CallbackListener(function ($request, $response) {
+                if (!$response) {
+                    $request->addHeaders(array(
+                        'User-Agent' => $this->getUserAgent(),
+                    ));
+                }
+            }));
+
             $this->browser->getClient()->setCookieJar(new CookieJar);
         }
 
