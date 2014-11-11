@@ -1,10 +1,10 @@
 {
-    "name": "starsquare/letterboxd-ics",
+    "name": "cmbuckley/letterboxd-ics",
     "description": "Export Letterboxd diary to iCalendar format",
-    "version": "2.2.0",
+    "version": "3.0.0",
     "type": "library",
     "keywords": ["letterboxd", "calendar", "ical", "ics"],
-    "homepage": "http://starsquare.github.io/letterboxd-ics/",
+    "homepage": "http://cmbuckley.github.io/letterboxd-ics/",
     "license": "MIT",
     "authors": [
         {
@@ -14,9 +14,9 @@
         }
     ],
     "support": {
-        "email": "letterboxd-ics@starsquare.co.uk",
-        "issues": "https://github.com/starsquare/letterboxd-ics/issues",
-        "source": "https://github.com/starsquare/letterboxd-ics"
+        "email": "letterboxd-ics@cmbuckley.co.uk",
+        "issues": "https://github.com/cmbuckley/letterboxd-ics/issues",
+        "source": "https://github.com/cmbuckley/letterboxd-ics"
     },
     "require": {
         "php": ">=5.3.0",

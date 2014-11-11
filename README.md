@@ -1,14 +1,14 @@
 letterboxd-ics is a package to render a [Letterboxd](http://letterboxd.com)
 diary in iCalendar format.
 
-[![Build Status](https://travis-ci.org/starsquare/letterboxd-ics.png)](https://travis-ci.org/starsquare/letterboxd-ics)
+[![Build Status](https://travis-ci.org/cmbuckley/letterboxd-ics.png)](https://travis-ci.org/cmbuckley/letterboxd-ics)
 
 # How to install (standalone)
 
 If you want to use the standalone package, you can do the following:
 
 ```bash
-git clone https://github.com/starsquare/letterboxd-ics.git
+git clone https://github.com/cmbuckley/letterboxd-ics.git
 cd letterboxd-ics
 curl -sS https://getcomposer.org/installer | php
 php composer.phar install
@@ -20,13 +20,13 @@ folder.
 
 # How to install (Packagist)
 
-Alternatively, letterboxd-ics is [available on Packagist](https://packagist.org/packages/starsquare/letterboxd-ics),
+Alternatively, letterboxd-ics is [available on Packagist](https://packagist.org/packages/cmbuckley/letterboxd-ics),
 so it can be specified as a dependency using [Composer](http://getcomposer.org):
 
 ```json
 {
     "require": {
-        "starsquare/letterboxd-ics": "~2.0"
+        "cmbuckley/letterboxd-ics": "~3.0"
     }
 }
 ```
