@@ -24,8 +24,8 @@
         "eluceo/ical": "dev-master"
     },
     "autoload": {
-        "psr-0": {
-            "Starsquare\\": "src/"
+        "psr-4": {
+            "Starsquare\\Letterboxd\\": "src/"
         }
     }
 }
