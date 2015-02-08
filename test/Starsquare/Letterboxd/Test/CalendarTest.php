@@ -3,6 +3,7 @@
 namespace Starsquare\Letterboxd\Test;
 
 use Starsquare\Letterboxd\Calendar;
+use Buzz\Message\Request;
 use Buzz\Message\Response;
 
 class CalendarTest extends \PHPUnit_Framework_TestCase {
@@ -82,6 +83,21 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
         new Calendar(4);
     }
 
+    public function testGetBrowser() {
+        $calendar = new Calendar();
+
+        $browser = $calendar->getBrowser();
+        $this->assertInstanceof('Buzz\\Browser', $browser);
+
+        $listener = $browser->getListener();
+        $this->assertInstanceof('Buzz\\Listener\\CallbackListener', $listener);
+
+        $request = new Request();
+        $listener->preSend($request);
+        $headers = $request->getHeaders();
+        $this->assertRegExp('#User-Agent: letterboxd-ics/[\d.]+ \(http://bux\.re/letterboxd-ics\) PHP/.*#', $headers[0]);
+    }
+
     public function testLogin() {
         $this->assertLogin($this->onConsecutiveCalls(
             $this->getResponse('test/etc/http/home'),
@@ -157,6 +173,43 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
 
         $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'operation failed');
         $calendar->loadEvents();
+    }
+
+    public function testOutputErrors() {
+        $calendar = new Calendar(array(
+            'file' => '/missing/file',
+            'output' => array(
+                'errors' => true,
+            ),
+        ));
+
+        $this->assertStringStartsWith('Cannot find event file', (string) $calendar);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testSendHeaders() {
+        if (!function_exists('xdebug_get_headers')) {
+            $this->markTestSkipped('Needs Xdebug to retrieve headers');
+        }
+
+        $calendar = new Calendar(array(
+            'calendar' => array(
+                'name' => 'Test',
+                'timezone' => 'UTC',
+            ),
+            'file' => 'test/etc/diary.csv',
+        ));
+
+        $calendar->sendHeaders();
+        $headers = xdebug_get_headers();
+
+        $this->assertSame('Content-Type: text/calendar; charset=utf-8', $headers[0]);
+        $this->assertSame('Cache-Control: no-cache, must-revalidate', $headers[1]);
+        $this->assertSame('Expires: Sat, 29 Sep 1984 15:00:00 GMT', $headers[2]);
+        $this->assertSame('Last-Modified: Sat, 29 Sep 1984 15:00:00 GMT', $headers[3]);
+        $this->assertRegExp('/ETag: "[0-9a-f]{32}"/', $headers[4]);
     }
 }
 
