@@ -56,6 +56,7 @@ Other configuration options:
     * **timezone**: Timezone of the calendar.
 * **output**: Config for the output.
     * **headers**: Whether to send response headers.
+    * **errors**: Whether to display errors.
     * **content-type**: Content-Type sent with the response. Defaults to
       `text/calendar`, but `text/plain` will work for most clients.
 

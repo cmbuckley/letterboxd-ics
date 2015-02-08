@@ -39,6 +39,7 @@ class Calendar extends BaseCalendar {
         'auth'   => array(),
         'output' => array(
             'headers'      => true,
+            'errors'       => false,
             'content-type' => 'text/calendar',
             'charset'      => 'utf-8',
         ),
@@ -238,8 +239,14 @@ class Calendar extends BaseCalendar {
         try {
             return parent::__toString();
         } catch (\Exception $ex) {
-            trigger_error($ex->getMessage(), E_USER_ERROR);
-            return '';
+            $message = $ex->getMessage();
+
+            if ($this->options['output']['errors']) {
+                return $message;
+            } else {
+                trigger_error($message, E_USER_ERROR);
+                return '';
+            }
         }
     }
 }
