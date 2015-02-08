@@ -4,7 +4,8 @@ Content-Type: text/html;charset=utf-8
 
 <!DOCTYPE html>
 <html>
+<script>var supermodelCSRF = "DUMMY";</script>
 <form>
-<input type="hidden" name="__csrf" value="DUMMY" />
+<input type="hidden" name="__csrf" value="LIES" />
 </form>
 </html>

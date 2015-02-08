@@ -15,7 +15,7 @@ class Calendar extends BaseCalendar {
     const PROD_ID = '-//StarSquare//LETTERBOXD//%s//EN';
     const USER_AGENT = 'letterboxd-ics/%s (http://bux.re/letterboxd-ics) PHP/%s';
     const CSRF_TOKEN = '__csrf';
-    const CSRF_PATTERN = '/name="%s" value="(?P<token>[^"]+)"/';
+    const CSRF_PATTERN = '/CSRF = "(?P<token>[^"]+)"/';
 
     protected $urls = array(
         'home'   => 'http://letterboxd.com/',
