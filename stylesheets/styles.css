@@ -24,10 +24,6 @@ time, mark, audio, video {
 
 
 /* Base text styles */
-html {
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-}
 
 body {
   padding:10px 50px 0 0;
@@ -102,13 +98,15 @@ strong {
 }
 
 ul {
-  list-style: inside;
+  list-style-position: inside;
+  list-style: disc;
   padding-left: 25px;
 }
 
 ol {
-  list-style: decimal inside;
-  padding-left: 20px;
+  list-style-position: inside;
+  list-style: decimal;
+  padding-left: 25px;
 }
 
 blockquote {
@@ -219,7 +217,7 @@ td {
 header {
 	background-color: #171717;
 	color: #FDFDFB;
-  width:230px;
+  width:170px;
   float:left;
   position:fixed;
 	border: 1px solid #000;
@@ -321,7 +319,7 @@ a.buttons:hover {
 /* Section - for main page content */
 
 section {
-  width:600px;
+  width:650px;
   float:right;
   padding-bottom:50px;
 }
@@ -378,37 +376,42 @@ footer {
 
 @media print, screen and (max-width: 720px) {
   body {
-    padding: 0;
     word-wrap:break-word;
   }
 
   header {
-    padding:10px 15px 0;
+    padding:10px 20px 0;
 		margin-right: 0;
-    margin-top: 0;
-    border-radius: 0;
-  }
-
-  header ul li.download {
-    display:none;
   }
 
 	section {
-    padding:10px 15px;
+    padding:10px 0 10px 20px;
     margin:0 0 30px;
   }
 
-  pre {
-      font-size: 12px;
-  }
-
 	footer {
-		margin: 10px 15px;
+		margin: 0 0 0 30px;
 	}
 
   header ul, header p.view {
     position:static;
   }
+}
+
+@media print, screen and (max-width: 480px) {
+
+  header ul li.download {
+    display:none;
+  }
+
+	footer {
+		margin: 0 0 0 20px;
+	}
+
+	footer a{
+		display:block;
+	}
+
 }
 
 @media print {

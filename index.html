@@ -41,10 +41,9 @@ diary in iCalendar format.</p>
 <p>If you want to use the standalone package, you can do the following:</p>
 
 <div class="highlight highlight-bash"><pre>git clone https://github.com/cmbuckley/letterboxd-ics.git
-<span class="nb">cd </span>letterboxd-ics
-curl -sS https://getcomposer.org/installer <span class="p">|</span> php
-php composer.phar install
-</pre></div>
+<span class="pl-s3">cd</span> letterboxd-ics
+curl -sS https://getcomposer.org/installer <span class="pl-k">|</span> php
+php composer.phar install</pre></div>
 
 <p>Once you have the package and its dependencies, you should edit <code>config.json</code>
 to contain your Letterboxd credentials, and point a Web server at the <code>public</code>
@@ -56,30 +55,28 @@ folder.</p>
 <p>Alternatively, letterboxd-ics is <a href="https://packagist.org/packages/cmbuckley/letterboxd-ics">available on Packagist</a>,
 so it can be specified as a dependency using <a href="http://getcomposer.org">Composer</a>:</p>
 
-<div class="highlight highlight-json"><pre><span class="p">{</span>
-    <span class="nt">"require"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"cmbuckley/letterboxd-ics"</span><span class="p">:</span> <span class="s2">"~2.0"</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
+<div class="highlight highlight-json"><pre>{
+    <span class="pl-s1"><span class="pl-pds">"</span>require<span class="pl-pds">"</span></span>: {
+        <span class="pl-s1"><span class="pl-pds">"</span>cmbuckley/letterboxd-ics<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>~3.0<span class="pl-pds">"</span></span>
+    }
+}</pre></div>
 
 <h1>
 <a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to use</h1>
 
 <p>You can specify your own options:</p>
 
-<div class="highlight highlight-php"><pre><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="k">require</span> <span class="s1">'vendor/autoload.php'</span><span class="p">;</span>
-
-<span class="nv">$calendar</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Starsquare\Letterboxd\Calendar</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
-    <span class="s1">'auth'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-        <span class="s1">'username'</span> <span class="o">=&gt;</span> <span class="s1">'user@example.com'</span><span class="p">,</span>
-        <span class="s1">'password'</span> <span class="o">=&gt;</span> <span class="s1">'password'</span><span class="p">,</span>
-    <span class="p">),</span>
-<span class="p">));</span>
-
-<span class="k">echo</span> <span class="nv">$calendar</span><span class="p">;</span>
-</pre></div>
+<div class="highlight highlight-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-k">require</span> <span class="pl-s1"><span class="pl-pds">'</span>vendor/autoload.php<span class="pl-pds">'</span></span>;</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$calendar</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">Starsquare\Letterboxd\</span><span class="pl-s3">Calendar</span>(<span class="pl-s3">array</span>(</span>
+<span class="pl-s2">    <span class="pl-s1"><span class="pl-pds">'</span>auth<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s3">array</span>(</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>username<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>user@example.com<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>password<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>password<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">    ),</span>
+<span class="pl-s2">));</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-s3">echo</span> <span class="pl-vo">$calendar</span>;</span></pre></div>
 
 <p>Other configuration options:</p>
 
@@ -101,6 +98,8 @@ so it can be specified as a dependency using <a href="http://getcomposer.org">Co
 <li>
 <strong>headers</strong>: Whether to send response headers.</li>
 <li>
+<strong>errors</strong>: Whether to display errors.</li>
+<li>
 <strong>content-type</strong>: Content-Type sent with the response. Defaults to
 <code>text/calendar</code>, but <code>text/plain</code> will work for most clients.</li>
 </ul>
@@ -116,6 +115,6 @@ provided in the <code>public</code> folder.</p>
       </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-
+		
   </body>
 </html>
