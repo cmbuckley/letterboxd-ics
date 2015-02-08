@@ -11,7 +11,7 @@ use Eluceo\iCal\Component\Calendar as BaseCalendar;
 use Eluceo\iCal\Component\Event;
 
 class Calendar extends BaseCalendar {
-    const VERSION = '3.1.0';
+    const VERSION = '3.1.1';
     const PROD_ID = '-//StarSquare//LETTERBOXD//%s//EN';
     const USER_AGENT = 'letterboxd-ics/%s (http://bux.re/letterboxd-ics) PHP/%s';
     const CSRF_TOKEN = '__csrf';
@@ -114,12 +114,13 @@ class Calendar extends BaseCalendar {
     public function getBrowser() {
         if ($this->browser === null) {
             $this->browser = new Browser();
+            $headers = array(
+                'User-Agent' => $this->getUserAgent(),
+            );
 
-            $this->browser->addListener(new CallbackListener(function ($request, $response = null) {
+            $this->browser->addListener(new CallbackListener(function ($request, $response = null) use ($headers) {
                 if (!$response) {
-                    $request->addHeaders(array(
-                        'User-Agent' => $this->getUserAgent(),
-                    ));
+                    $request->addHeaders($headers);
                 }
             }));
 

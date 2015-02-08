@@ -171,7 +171,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
             'file' => 'zip://test/etc/diary.zip#missing.csv',
         ));
 
-        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'operation failed');
+        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Cannot find event file');
         $calendar->loadEvents();
     }
 
