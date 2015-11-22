@@ -4,8 +4,8 @@ namespace Starsquare\Letterboxd;
 
 use Buzz\Browser;
 use Buzz\Listener\CallbackListener;
+use Buzz\Listener\CookieListener;
 use Buzz\Message\RequestInterface;
-use Buzz\Util\CookieJar;
 
 use Eluceo\iCal\Component\Calendar as BaseCalendar;
 use Eluceo\iCal\Component\Event;
@@ -124,7 +124,7 @@ class Calendar extends BaseCalendar {
                 }
             }));
 
-            $this->browser->getClient()->setCookieJar(new CookieJar);
+            $this->browser->addListener(new CookieListener);
         }
 
         return $this->browser;

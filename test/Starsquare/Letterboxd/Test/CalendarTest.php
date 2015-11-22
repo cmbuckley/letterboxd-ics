@@ -90,7 +90,12 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceof('Buzz\\Browser', $browser);
 
         $listener = $browser->getListener();
-        $this->assertInstanceof('Buzz\\Listener\\CallbackListener', $listener);
+        $this->assertInstanceof('Buzz\\Listener\\ListenerChain', $listener);
+
+        $listeners = $listener->getListeners();
+        $this->assertSame(2, count($listeners));
+        $this->assertInstanceOf('Buzz\\Listener\\CallbackListener', $listeners[0]);
+        $this->assertInstanceOf('Buzz\\Listener\\CookieListener',   $listeners[1]);
 
         $request = new Request();
         $listener->preSend($request);
