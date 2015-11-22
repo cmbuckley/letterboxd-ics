@@ -10,13 +10,22 @@ If you want to use the standalone package, you can do the following:
 ```bash
 git clone https://github.com/cmbuckley/letterboxd-ics.git
 cd letterboxd-ics
-curl -sS https://getcomposer.org/installer | php
-php composer.phar install
+composer install
 ```
 
-Once you have the package and its dependencies, you should edit `config.json`
-to contain your Letterboxd credentials, and point a Web server at the `public`
-folder.
+Once you have the package and its dependencies, set environment variables
+`LETTERBOXD_USERNAME` and `LETTERBOXD_PASSWORD` to your credentials, then point
+a Web server at the `public` folder.
+
+# How to install (Heroku)
+
+Fork the repository and update `.travis.yml`:
+
+```bash
+heroku apps:create my-custom-app-name
+travis encrypt $(heroku auth:token) --add deploy.api_key
+sed -i'' 's/letterboxd-ical/my-custom-app-name/' .travis.yml
+```
 
 # How to install (Packagist)
 

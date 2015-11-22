@@ -1,11 +1,15 @@
 language: php
-
 php:
-    - 5.3
-    - 5.4
-    - 5.5
-    - hhvm
-
+- 5.3
+- 5.4
+- 5.5
+- 5.6
+- hhvm
 before_script:
-    - composer self-update
-    - composer install
+- composer self-update
+- composer install
+deploy:
+  provider: heroku
+  app: letterboxd-ical
+  api_key:
+    secure: jQUgiwCQywOMPjs8dIHBYQiy70CYq46jR/2mNEy7PXicncxQTdfy7haJAXhlW+NuEE1x1jjAkKguqJgVrbR+cVeYSmlwVs7SPvfwGEK6XVhYJc/g4vLM5dctyFZgR4mPGyaJAytEsq8rdh9ATPrkvk3jR52XMVU/7Pmje3J0wgI=
