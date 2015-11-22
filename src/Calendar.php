@@ -131,6 +131,12 @@ class Calendar extends BaseCalendar {
     }
 
     protected function login() {
+        $auth = $this->options['auth'];
+
+        if (empty($auth['username']) || empty($auth['password'])) {
+            throw new Exception('Cannot log in: Missing username/password');
+        }
+
         $browser = $this->getBrowser();
         $home = $browser->get($this->urls['home']);
         $content = $home->getContent();
@@ -139,9 +145,7 @@ class Calendar extends BaseCalendar {
             throw new Exception('Cannot log in: Cannot find CSRF token');
         }
 
-        $auth = $this->options['auth'];
         $auth[static::CSRF_TOKEN] = $matches['token'];
-
         $loginResponse = $browser->submit($this->urls['login'], $auth, RequestInterface::METHOD_POST);
 
         if (!$loginResponse->isOk()) {

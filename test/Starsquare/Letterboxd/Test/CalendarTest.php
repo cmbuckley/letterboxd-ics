@@ -43,7 +43,12 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
 
 
     protected function assertLogin($getResponse, $submitResponse = null) {
-        $calendar = new CalendarStub();
+        $calendar = new CalendarStub(array(
+            'auth' => array(
+                'username' => 'foo',
+                'password' => 'bar',
+            ),
+        ));
 
         $browser = $this->getMock('Buzz\\Browser');
         $calendar->setBrowser($browser);
@@ -61,7 +66,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
         if ($submitResponse) {
             $browser->expects($this->once())
                 ->method('submit')
-                ->with('http://letterboxd.com/user/login.do', array('__csrf' => 'DUMMY'), 'POST')
+                ->with('http://letterboxd.com/user/login.do', array('__csrf' => 'DUMMY', 'username' => 'foo', 'password' => 'bar'), 'POST')
                 ->will($this->returnValue($this->getResponse($submitResponse)));
         }
 
@@ -101,6 +106,13 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
         $listener->preSend($request);
         $headers = $request->getHeaders();
         $this->assertRegExp('#User-Agent: letterboxd-ics/[\d.]+ \(http://bux\.re/letterboxd-ics\) PHP/.*#', $headers[0]);
+    }
+
+    public function testMissingCredentials() {
+        $calendar = new Calendar();
+
+        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Missing username/password');
+        $calendar->loadEvents();
     }
 
     public function testLogin() {
