@@ -30,6 +30,8 @@ class Calendar extends BaseCalendar {
         'summary' => 'Name',
         'date'    => 'Watched Date',
         'url'     => 'Letterboxd URI',
+        'rating'  => 'Rating',
+        'year'    => 'Year',
     );
 
     /**
@@ -71,6 +73,10 @@ class Calendar extends BaseCalendar {
 
         if (isset($this->options['calendar']['name'])) {
             $this->setName($this->options['calendar']['name']);
+        }
+
+        if (isset($this->options['calendar']['description'])) {
+            $this->setDescription($this->options['calendar']['description']);
         }
 
         if (isset($this->options['calendar']['timezone'])) {
@@ -208,6 +214,7 @@ class Calendar extends BaseCalendar {
                     $event->setDtEnd(new \DateTime($row[$this->headers['date']]));
                     $event->setNoTime(true);
                     $event->setSummary($row[$this->headers['summary']]);
+                    $event->setDescription($this->getEventDescription($row));
                     $event->setUrl($row[$this->headers['url']]);
 
                     $this->addEvent($event);
@@ -216,11 +223,25 @@ class Calendar extends BaseCalendar {
         }
     }
 
+    protected function getEventDescription(array $data) {
+        $template = <<<EOS
+Year: %d
+Rating: %s
+EOS;
+
+       $year       = $data[$this->headers['year']];
+       $rating     = $data[$this->headers['rating']];
+       $ratingText = str_repeat('★', intval($rating)) . (strpos($rating, '.5') ? '½' : '');
+
+       return sprintf($template, $year, $ratingText);
+    }
+
     public function sendHeaders() {
         if ($this->options['output']['headers'] && !headers_sent()) {
             header(sprintf(
-                'Content-Type: %s; charset=utf-8',
-                $this->options['output']['content-type']
+                'Content-Type: %s; charset=%s',
+                $this->options['output']['content-type'],
+                $this->options['output']['charset']
             ));
             header('Cache-Control: no-cache, must-revalidate');
             header('Expires: Sat, 29 Sep 1984 15:00:00 GMT');

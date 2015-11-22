@@ -53,12 +53,14 @@ Other configuration options:
 
 * **calendar**: Config for the calendar.
     * **name**: Name of the calendar.
+    * **description**: Full description of the calendar.
     * **timezone**: Timezone of the calendar.
 * **output**: Config for the output.
     * **headers**: Whether to send response headers.
     * **errors**: Whether to display errors.
     * **content-type**: Content-Type sent with the response. Defaults to
       `text/calendar`, but `text/plain` will work for most clients.
+    * **charset**: Character set sent with the response.
 
 Alternatively, you can define your configuration options in a JSON-encoded
 config file, and pass the file path to the `Calendar` object. An example is
