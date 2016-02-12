@@ -3,15 +3,27 @@
 namespace Starsquare\Letterboxd\Test;
 
 use Starsquare\Letterboxd\Calendar;
+use Starsquare\Letterboxd\Logger;
 use Buzz\Message\Request;
 use Buzz\Message\Response;
 
 class CalendarTest extends \PHPUnit_Framework_TestCase {
     protected $zipFile = 'test/etc/diary.zip';
+    protected $logStream;
+    protected $log;
+
+    protected function setUp() {
+        $this->logStream = fopen('/dev/null', 'w');
+        $this->log = new Logger($this->logStream);
+    }
 
     protected function tearDown() {
         if (file_exists($this->zipFile)) {
             unlink($this->zipFile);
+        }
+
+        if ($this->logStream) {
+            fclose($this->logStream);
         }
     }
 
@@ -44,6 +56,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
 
     protected function assertLogin($getResponse, $submitResponse = null) {
         $calendar = new CalendarStub(array(
+            'log' => $this->log,
             'auth' => array(
                 'username' => 'foo',
                 'password' => 'bar',
@@ -160,6 +173,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
 
     public function testOutputFile() {
         $calendar = new Calendar(array(
+            'log' => $this->log,
             'calendar' => array(
                 'name' => 'Test',
                 'timezone' => 'UTC',
@@ -176,6 +190,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
 
     public function testMissingEventFile() {
         $calendar = new Calendar(array(
+            'log' => $this->log,
             'file' => '/missing/file',
         ));
 
@@ -185,6 +200,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
 
     public function testInvalidZip() {
         $calendar = new Calendar(array(
+            'log' => $this->log,
             'file' => 'zip://test/etc/diary.zip#missing.csv',
         ));
 
@@ -194,6 +210,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
 
     public function testOutputErrors() {
         $calendar = new Calendar(array(
+            'log' => $this->log,
             'file' => '/missing/file',
             'output' => array(
                 'errors' => true,
@@ -212,6 +229,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
         }
 
         $calendar = new Calendar(array(
+            'log' => $this->log,
             'calendar' => array(
                 'name' => 'Test',
                 'timezone' => 'UTC',

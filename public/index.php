@@ -3,6 +3,7 @@
 require '../vendor/autoload.php';
 
 echo new Starsquare\Letterboxd\Calendar(array(
+    'log' => new Starsquare\Letterboxd\Logger(STDERR),
     'auth' => array(
         'username' => getenv('LETTERBOXD_USERNAME'),
         'password' => getenv('LETTERBOXD_PASSWORD'),

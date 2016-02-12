@@ -67,9 +67,20 @@ class Calendar extends BaseCalendar {
      */
     protected $file = null;
 
+    /**
+     * Logger
+     */
+    protected $log = null;
+
     public function __construct($options = array()) {
         parent::__construct(sprintf(static::PROD_ID, static::VERSION));
         $this->setOptions($options);
+
+        if (!isset($this->options['log'])) {
+            $this->options['log'] = new Logger(STDERR);
+        }
+
+        $this->log = $this->options['log'];
 
         if (isset($this->options['calendar']['name'])) {
             $this->setName($this->options['calendar']['name']);
@@ -151,6 +162,8 @@ class Calendar extends BaseCalendar {
             throw new Exception('Cannot log in: Cannot find CSRF token');
         }
 
+        $this->log->info('Logging in');
+
         $auth[static::CSRF_TOKEN] = $matches['token'];
         $loginResponse = $browser->submit($this->urls['login'], $auth, RequestInterface::METHOD_POST);
 
@@ -165,6 +178,8 @@ class Calendar extends BaseCalendar {
         if ($result->result === 'error') {
             throw new Exception('Cannot log in: ' . $result->messages[0]);
         }
+
+        $this->log->notice('Login completed');
     }
 
     protected function getFile() {
@@ -174,6 +189,7 @@ class Calendar extends BaseCalendar {
             } else {
                 $this->login();
 
+                $this->log->info('Getting export file: ' . $this->urls['export']);
                 $export = $this->getBrowser()->get($this->urls['export']);
 
                 if (!$export->isOk()) {
@@ -184,6 +200,7 @@ class Calendar extends BaseCalendar {
                     throw new Exception('Cannot read export: Did not respond with a ZIP file');
                 }
 
+                $this->log->info('Creating local export ZIP');
                 $zipFile = tempnam(sys_get_temp_dir(), 'letterboxd-export');
                 file_put_contents($zipFile, $export->getContent());
                 $this->file = "zip://$zipFile#diary.csv";
@@ -203,6 +220,8 @@ class Calendar extends BaseCalendar {
                 throw new Exception("Cannot find event file: " . $error['message']);
             }
 
+            $this->log->info('Parsing diary CSV');
+
             while (false !== ($row = fgetcsv($diary))) {
                 if ($headers === null) {
                     $headers = $row;
@@ -220,6 +239,8 @@ class Calendar extends BaseCalendar {
                     $this->addEvent($event);
                 }
             }
+
+            $this->log->info('Parsing complete');
         }
     }
 
