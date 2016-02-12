@@ -7,7 +7,17 @@ class Logger {
     protected $stream;
 
     public function __construct($stream) {
+        if (is_string($stream)) {
+            $stream = fopen($stream, 'w');
+        }
+
         $this->stream = $stream;
+    }
+
+    public function __destruct() {
+        if (is_resource($this->stream)) {
+            fclose($this->stream);
+        }
     }
 
     public function log($message, $level) {

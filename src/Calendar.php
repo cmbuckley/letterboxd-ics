@@ -77,7 +77,7 @@ class Calendar extends BaseCalendar {
         $this->setOptions($options);
 
         if (!isset($this->options['log'])) {
-            $this->options['log'] = new Logger(STDERR);
+            $this->options['log'] = new Logger('php://stderr');
         }
 
         $this->log = $this->options['log'];
