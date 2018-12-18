@@ -18,9 +18,9 @@ class Calendar extends BaseCalendar {
     const CSRF_PATTERN = '/CSRF = "(?P<token>[^"]+)"/';
 
     protected $urls = array(
-        'home'   => 'http://letterboxd.com/',
-        'login'  => 'http://letterboxd.com/user/login.do',
-        'export' => 'http://letterboxd.com/data/export/',
+        'home'   => 'https://letterboxd.com/',
+        'login'  => 'https://letterboxd.com/user/login.do',
+        'export' => 'https://letterboxd.com/data/export/',
     );
 
     /**
@@ -168,6 +168,7 @@ class Calendar extends BaseCalendar {
         $loginResponse = $browser->submit($this->urls['login'], $auth, RequestInterface::METHOD_POST);
 
         if (!$loginResponse->isOk()) {
+            $this->log->warn('Login HTTP Error ' . $loginResponse->getStatusCode());
             throw new Exception('Cannot log in: Received HTTP ' . $loginResponse->getStatusCode());
         }
 
@@ -176,6 +177,7 @@ class Calendar extends BaseCalendar {
         }
 
         if ($result->result === 'error') {
+            $this->log->warn('Login error: ' . $result->messages[0]);
             throw new Exception('Cannot log in: ' . $result->messages[0]);
         }
 

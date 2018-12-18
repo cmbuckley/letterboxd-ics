@@ -79,7 +79,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
         if ($submitResponse) {
             $browser->expects($this->once())
                 ->method('submit')
-                ->with('http://letterboxd.com/user/login.do', array('__csrf' => 'DUMMY', 'username' => 'foo', 'password' => 'bar'), 'POST')
+                ->with('https://letterboxd.com/user/login.do', array('__csrf' => 'DUMMY', 'username' => 'foo', 'password' => 'bar'), 'POST')
                 ->will($this->returnValue($this->getResponse($submitResponse)));
         }
 

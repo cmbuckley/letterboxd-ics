@@ -8,7 +8,7 @@ class Logger {
 
     public function __construct($stream) {
         if (is_string($stream)) {
-            $stream = fopen($stream, 'w');
+            $stream = fopen($stream, 'a');
         }
 
         $this->stream = $stream;
