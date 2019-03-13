@@ -1,0 +1,34 @@
+title: Chris Buckley
+description: letterboxd-ics is a package to render a Letterboxd diary in iCalendar format.
+
+url: https://cmbuckley.co.uk
+baseurl: /letterboxd-ics
+
+remote_theme: "cmbuckley/cmbuckley.github.io"
+
+markdown: kramdown
+highlighter: rouge
+
+navigation:
+ - title: Home
+   url: /
+ - title: CV
+   url: /cv/
+ - title: Contact
+   url: /contact/
+ - title: Blog
+   url: /blog/
+ - title: Interests
+   url: /interests/
+ - title: Projects
+   url: /projects/
+
+social:
+   github:    cmbuckley
+   linkedin:  cmbuckley
+   email:     chris@cmbuckley.co.uk
+   twitter:   _cmbuckley
+   facebook:  cmbuckley
+   instagram: c.m.buckley
+   amazon:    https://bux.re/amzn
+   google:    https://bux.re/+
