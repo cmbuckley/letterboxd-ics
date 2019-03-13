@@ -3,7 +3,7 @@ diary in iCalendar format.
 
 [![Build Status](https://travis-ci.org/cmbuckley/letterboxd-ics.png)](https://travis-ci.org/cmbuckley/letterboxd-ics)
 
-# How to install (standalone)
+## How to install (standalone)
 
 If you want to use the standalone package, you can do the following:
 
@@ -17,7 +17,7 @@ Once you have the package and its dependencies, set environment variables
 `LETTERBOXD_USERNAME` and `LETTERBOXD_PASSWORD` to your credentials, then point
 a Web server at the `public` folder.
 
-# How to install (Heroku)
+## How to install (Heroku)
 
 Fork the repository and update `.travis.yml`:
 
@@ -27,7 +27,7 @@ travis encrypt $(heroku auth:token) --add deploy.api_key
 sed -i'' 's/letterboxd-ical/my-custom-app-name/' .travis.yml
 ```
 
-# How to install (Packagist)
+## How to install (Packagist)
 
 Alternatively, letterboxd-ics is [available on Packagist](https://packagist.org/packages/cmbuckley/letterboxd-ics),
 so it can be specified as a dependency using [Composer](http://getcomposer.org):
@@ -40,7 +40,7 @@ so it can be specified as a dependency using [Composer](http://getcomposer.org):
 }
 ```
 
-# How to use
+## How to use
 
 You can specify your own options:
 
