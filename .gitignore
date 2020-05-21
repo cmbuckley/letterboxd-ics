@@ -1,4 +1,7 @@
 # Ignore composer files
 composer.lock
 composer.phar
+_site
+.bundle
+.sass-cache
 vendor
