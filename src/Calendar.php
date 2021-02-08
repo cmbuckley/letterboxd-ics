@@ -3,8 +3,10 @@
 namespace Starsquare\Letterboxd;
 
 use Buzz\Browser;
-use Buzz\Listener\CallbackListener;
-use Buzz\Listener\CookieListener;
+use Buzz\Client\Curl;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Buzz\Middleware\CallbackMiddleware;
+use Buzz\Middleware\CookieMiddleware;
 use Buzz\Message\RequestInterface;
 
 use Eluceo\iCal\Component\Calendar as BaseCalendar;
@@ -130,18 +132,17 @@ class Calendar extends BaseCalendar {
 
     public function getBrowser() {
         if ($this->browser === null) {
-            $this->browser = new Browser();
-            $headers = array(
-                'User-Agent' => $this->getUserAgent(),
-            );
+            $this->browser = new Browser(new Curl(new Psr17Factory), new Psr17Factory);
 
-            $this->browser->addListener(new CallbackListener(function ($request, $response = null) use ($headers) {
-                if (!$response) {
-                    $request->addHeaders($headers);
+            $this->browser->addMiddleware(new CallbackMiddleware(function ($request, $response = null) {
+                if ($response) {
+                    return $response;
                 }
+
+                return $request->withHeader('User-Agent', $this->getUserAgent());
             }));
 
-            $this->browser->addListener(new CookieListener);
+            $this->browser->addMiddleware(new CookieMiddleware);
         }
 
         return $this->browser;
@@ -156,7 +157,7 @@ class Calendar extends BaseCalendar {
 
         $browser = $this->getBrowser();
         $home = $browser->get($this->urls['home']);
-        $content = $home->getContent();
+        $content = (string) $home->getBody();
 
         if (!preg_match(sprintf(static::CSRF_PATTERN, static::CSRF_TOKEN), $content, $matches)) {
             throw new Exception('Cannot log in: Cannot find CSRF token');
@@ -165,14 +166,14 @@ class Calendar extends BaseCalendar {
         $this->log->info('Logging in');
 
         $auth[static::CSRF_TOKEN] = $matches['token'];
-        $loginResponse = $browser->submit($this->urls['login'], $auth, RequestInterface::METHOD_POST);
+        $loginResponse = $browser->submitForm($this->urls['login'], $auth);
 
-        if (!$loginResponse->isOk()) {
+        if ($loginResponse->getStatusCode() != 200) {
             $this->log->warn('Login HTTP Error ' . $loginResponse->getStatusCode());
             throw new Exception('Cannot log in: Received HTTP ' . $loginResponse->getStatusCode());
         }
 
-        if (($result = json_decode($loginResponse->getContent())) === null) {
+        if (($result = json_decode((string) $loginResponse->getBody())) === null) {
             throw new Exception('Cannot log in: Could not decode response as JSON');
         }
 
@@ -194,17 +195,18 @@ class Calendar extends BaseCalendar {
                 $this->log->info('Getting export file: ' . $this->urls['export']);
                 $export = $this->getBrowser()->get($this->urls['export']);
 
-                if (!$export->isOk()) {
+                if ($export->getStatusCode() !== 200) {
                     throw new Exception('Cannot read export: Received HTTP ' . $export->getStatusCode());
                 }
 
-                if (strpos($export->getHeader('Content-Type'), 'application/zip') === false) {
+                $contentType = $export->getHeader('Content-Type');
+                if (strpos($contentType[0], 'application/zip') === false) {
                     throw new Exception('Cannot read export: Did not respond with a ZIP file');
                 }
 
                 $this->log->info('Creating local export ZIP');
                 $zipFile = tempnam(sys_get_temp_dir(), 'letterboxd-export');
-                file_put_contents($zipFile, $export->getContent());
+                file_put_contents($zipFile, $export->getBody());
                 $this->file = "zip://$zipFile#diary.csv";
             }
         }
