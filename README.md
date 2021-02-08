@@ -1,4 +1,4 @@
-letterboxd-ics is a package to render a [Letterboxd](http://letterboxd.com)
+letterboxd-ics is a package to render a [Letterboxd](https://letterboxd.com)
 diary in iCalendar format.
 
 [![Build Status](https://travis-ci.org/cmbuckley/letterboxd-ics.png)](https://travis-ci.org/cmbuckley/letterboxd-ics)
@@ -30,7 +30,7 @@ sed -i'' 's/letterboxd-ical/my-custom-app-name/' .travis.yml
 ## How to install (Packagist)
 
 Alternatively, letterboxd-ics is [available on Packagist](https://packagist.org/packages/cmbuckley/letterboxd-ics),
-so it can be specified as a dependency using [Composer](http://getcomposer.org):
+so it can be specified as a dependency using [Composer](https://getcomposer.org):
 
 ```json
 {

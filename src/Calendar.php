@@ -13,7 +13,7 @@ use Eluceo\iCal\Component\Event;
 class Calendar extends BaseCalendar {
     const VERSION = '3.2.0';
     const PROD_ID = '-//StarSquare//LETTERBOXD//%s//EN';
-    const USER_AGENT = 'letterboxd-ics/%s (http://bux.re/letterboxd-ics) PHP/%s';
+    const USER_AGENT = 'letterboxd-ics/%s (https://bux.re/letterboxd-ics) PHP/%s';
     const CSRF_TOKEN = '__csrf';
     const CSRF_PATTERN = '/CSRF = "(?P<token>[^"]+)"/';
 

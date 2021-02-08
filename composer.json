@@ -4,13 +4,13 @@
     "version": "3.2.0",
     "type": "library",
     "keywords": ["letterboxd", "calendar", "ical", "ics"],
-    "homepage": "http://cmbuckley.github.io/letterboxd-ics/",
+    "homepage": "https://cmbuckley.co.uk/letterboxd-ics/",
     "license": "MIT",
     "authors": [
         {
             "name": "Chris Buckley",
             "email": "chris@cmbuckley.co.uk",
-            "homepage": "http://cmbuckley.co.uk"
+            "homepage": "https://cmbuckley.co.uk"
         }
     ],
     "support": {

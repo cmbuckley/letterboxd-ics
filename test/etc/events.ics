@@ -10,7 +10,7 @@ DTSTART;VALUE=DATE:20130101
 SEQUENCE:0
 TRANSP:OPAQUE
 DTEND;VALUE=DATE:20130101
-URL:http://letterboxd.com/film/test-2013/
+URL:https://letterboxd.com/film/test-2013/
 SUMMARY:Test
 CLASS:PUBLIC
 DESCRIPTION:Year: 2013\nRating: ½
@@ -23,7 +23,7 @@ DTSTART;VALUE=DATE:20130102
 SEQUENCE:0
 TRANSP:OPAQUE
 DTEND;VALUE=DATE:20130102
-URL:http://letterboxd.com/film/test-pilot/
+URL:https://letterboxd.com/film/test-pilot/
 SUMMARY:Test Pilot
 CLASS:PUBLIC
 DESCRIPTION:Year: 1938\nRating: ★
@@ -36,7 +36,7 @@ DTSTART;VALUE=DATE:20130103
 SEQUENCE:0
 TRANSP:OPAQUE
 DTEND;VALUE=DATE:20130103
-URL:http://letterboxd.com/film/the-tested/
+URL:https://letterboxd.com/film/the-tested/
 SUMMARY:The Tested
 CLASS:PUBLIC
 DESCRIPTION:Year: 2011\nRating: ★½
@@ -49,7 +49,7 @@ DTSTART;VALUE=DATE:20130104
 SEQUENCE:0
 TRANSP:OPAQUE
 DTEND;VALUE=DATE:20130104
-URL:http://letterboxd.com/film/this-is-not-a-test/
+URL:https://letterboxd.com/film/this-is-not-a-test/
 SUMMARY:This Is Not a Test
 CLASS:PUBLIC
 DESCRIPTION:Year: 2009\nRating: ★★
@@ -62,7 +62,7 @@ DTSTART;VALUE=DATE:20130105
 SEQUENCE:0
 TRANSP:OPAQUE
 DTEND;VALUE=DATE:20130105
-URL:http://letterboxd.com/film/the-test/
+URL:https://letterboxd.com/film/the-test/
 SUMMARY:The Test
 CLASS:PUBLIC
 DESCRIPTION:Year: 1935\nRating: ★★½
@@ -75,7 +75,7 @@ DTSTART;VALUE=DATE:20130106
 SEQUENCE:0
 TRANSP:OPAQUE
 DTEND;VALUE=DATE:20130106
-URL:http://letterboxd.com/film/the-final-test/
+URL:https://letterboxd.com/film/the-final-test/
 SUMMARY:The Final Test
 CLASS:PUBLIC
 DESCRIPTION:Year: 1954\nRating: ★★★
@@ -88,7 +88,7 @@ DTSTART;VALUE=DATE:20130107
 SEQUENCE:0
 TRANSP:OPAQUE
 DTEND;VALUE=DATE:20130107
-URL:http://letterboxd.com/film/crash-test/
+URL:https://letterboxd.com/film/crash-test/
 SUMMARY:Crash Test
 CLASS:PUBLIC
 DESCRIPTION:Year: 2003\nRating: ★★★★
