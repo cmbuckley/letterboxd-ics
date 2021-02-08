@@ -4,10 +4,13 @@ namespace Starsquare\Letterboxd\Test;
 
 use Starsquare\Letterboxd\Calendar;
 use Starsquare\Letterboxd\Logger;
-use Buzz\Message\Request;
-use Buzz\Message\Response;
+use Starsquare\Letterboxd\Exception as LetterboxdException;
+use Buzz\Browser;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\Stub\ConsecutiveCalls;
 
-class CalendarTest extends \PHPUnit_Framework_TestCase {
+class CalendarTest extends TestCase {
     protected $zipFile = 'test/etc/diary.zip';
     protected $logStream;
     protected $log;
@@ -33,9 +36,16 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
         }
 
         $pos = (strpos($raw, "\n\n") ?: strlen($raw));
-        $response = new Response();
-        $response->setHeaders(explode("\n", substr($raw, 0, $pos)));
-        $response->setContent((string) substr($raw, $pos + 2));
+        $headers = explode("\n", substr($raw, 0, $pos));
+        $body = (string) substr($raw, $pos + 2);
+        $statusLine = array_shift($headers);
+
+        $factory = new Psr17Factory;
+        $response = $factory->createResponse(200)->withBody($factory->createStream($body));
+        foreach ($headers as $header) {
+            list($header, $value) = explode(':', $header, 2);
+            $response = $response->withHeader($header, $value);
+        }
 
         return $response;
     }
@@ -46,11 +56,10 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
         $zip->addFile('test/etc/diary.csv', 'diary.csv');
         $zip->close();
 
-        $response = new Response();
-        $response->setHeaders(array('HTTP/1.1 200 OK', 'Content-Type: application/zip'));
-        $response->setContent(file_get_contents($this->zipFile));
+        $factory = new Psr17Factory;
+        $body = $factory->createStreamFromFile($this->zipFile);
 
-        return $response;
+        return $factory->createResponse(200)->withHeader('Content-Type', 'application/zip')->withBody($body);
     }
 
 
@@ -63,10 +72,10 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
             ),
         ));
 
-        $browser = $this->getMock('Buzz\\Browser');
+        $browser = $this->createMock(Browser::class);
         $calendar->setBrowser($browser);
 
-        $multiGet = ($getResponse instanceof \PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls);
+        $multiGet = ($getResponse instanceof ConsecutiveCalls);
 
         if (is_string($getResponse)) {
             $getResponse = $this->returnValue($this->getResponse($getResponse));
@@ -78,7 +87,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
 
         if ($submitResponse) {
             $browser->expects($this->once())
-                ->method('submit')
+                ->method('submitForm')
                 ->with('https://letterboxd.com/user/login.do', array('__csrf' => 'DUMMY', 'username' => 'foo', 'password' => 'bar'), 'POST')
                 ->will($this->returnValue($this->getResponse($submitResponse)));
         }
@@ -87,17 +96,17 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testMissingOptionsFile() {
-        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Cannot find options file');
+        $this->expectException(LetterboxdException::class, 'Cannot find options file');
         new Calendar('/missing/file');
     }
 
     public function testNonJsonOptionsFile() {
-        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Cannot parse options file as JSON');
+        $this->expectException(LetterboxdException::class, 'Cannot parse options file as JSON');
         new Calendar('test/etc/diary.csv');
     }
 
     public function testBadOptions() {
-        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Options must be array or path to options file');
+        $this->expectException(LetterboxdException::class, 'Options must be array or path to options file');
         new Calendar(4);
     }
 
@@ -105,26 +114,13 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
         $calendar = new Calendar();
 
         $browser = $calendar->getBrowser();
-        $this->assertInstanceof('Buzz\\Browser', $browser);
-
-        $listener = $browser->getListener();
-        $this->assertInstanceof('Buzz\\Listener\\ListenerChain', $listener);
-
-        $listeners = $listener->getListeners();
-        $this->assertSame(2, count($listeners));
-        $this->assertInstanceOf('Buzz\\Listener\\CallbackListener', $listeners[0]);
-        $this->assertInstanceOf('Buzz\\Listener\\CookieListener',   $listeners[1]);
-
-        $request = new Request();
-        $listener->preSend($request);
-        $headers = $request->getHeaders();
-        $this->assertRegExp('#User-Agent: letterboxd-ics/[\d.]+ \(http://bux\.re/letterboxd-ics\) PHP/.*#', $headers[0]);
+        $this->assertInstanceof(Browser::class, $browser);
     }
 
     public function testMissingCredentials() {
         $calendar = new Calendar();
 
-        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Missing username/password');
+        $this->expectException(LetterboxdException::class, 'Missing username/password');
         $calendar->loadEvents();
     }
 
@@ -136,27 +132,27 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testMissingCsrfToken() {
-        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Cannot find CSRF token');
+        $this->expectException(LetterboxdException::class, 'Cannot find CSRF token');
         $this->assertLogin('HTTP/1.1 200 OK');
     }
 
     public function testLoginBadHttpResponse() {
-        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Received HTTP 400');
+        $this->expectException(LetterboxdException::class, 'Received HTTP 400');
         $this->assertLogin('test/etc/http/home', 'HTTP/1.1 400 Bad Request');
     }
 
     public function testLoginNotJson() {
-        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Could not decode response as JSON');
+        $this->expectException(LetterboxdException::class, 'Could not decode response as JSON');
         $this->assertLogin('test/etc/http/home', 'HTTP/1.1 200 OK');
     }
 
     public function testLoginError() {
-        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Cannot log in: error message');
+        $this->expectException(LetterboxdException::class, 'Cannot log in: error message');
         $this->assertLogin('test/etc/http/home', 'test/etc/http/login-error');
     }
 
     public function testLoginBadExportHttpResponse() {
-        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Cannot read export: Received HTTP 400');
+        $this->expectException(LetterboxdException::class, 'Cannot read export: Received HTTP 400');
         $this->assertLogin($this->onConsecutiveCalls(
             $this->getResponse('test/etc/http/home'),
             $this->getResponse('HTTP/1.1 400 Bad Request')
@@ -164,7 +160,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testLoginBadExportData() {
-        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Cannot read export: Did not respond with a ZIP file');
+        $this->expectException(LetterboxdException::class, 'Cannot read export: Did not respond with a ZIP file');
         $this->assertLogin($this->onConsecutiveCalls(
             $this->getResponse('test/etc/http/home'),
             $this->getResponse('HTTP/1.1 200 OK')
@@ -194,7 +190,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
             'file' => '/missing/file',
         ));
 
-        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Cannot find event file');
+        $this->expectException(LetterboxdException::class, 'Cannot find event file');
         $calendar->loadEvents();
     }
 
@@ -204,7 +200,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase {
             'file' => 'zip://test/etc/diary.zip#missing.csv',
         ));
 
-        $this->setExpectedException('Starsquare\\Letterboxd\\Exception', 'Cannot find event file');
+        $this->expectException(LetterboxdException::class, 'Cannot find event file');
         $calendar->loadEvents();
     }
 
