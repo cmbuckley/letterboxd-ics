@@ -13,4 +13,4 @@ deploy:
   on:
     php: 7.3
   api_key:
-    secure: B+1LpSkQ9jJ8Jx4qAr1pLw0Q2ItEMxMsuHfXrqKmeXiMc0BTlxzhiweh3T18lIB9zjKtJFmlYrIiPXBJ6VD/aU7jTd93Cmyf1WcooCAGJigjUWIFiNVeBhb80cWDx+FDgcXAAD46OmDGmXGxD4qCv3PDY18IC/98v8I+t4kZZxM=
+    secure: Nr2Q2tvyhs/XNszqOWrWARHnRKNewZPYs5hnkOmv/ZKuk1k6SOG7ki10bhLI4AS2s7+WE3NAhuHIwJZzFRuYojekuJSAQY9WESvc7Q3Oofi59q1AZ+nEkU3Q7CJ87vPizF3LleHiYTweT3n4zdY8Y6sBGJDfvwLmMa/H0nfBMAI=
