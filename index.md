@@ -1,12 +1,11 @@
 ---
 layout: showcase
 title: letterboxd-ics
+travis: true
 ---
 
 letterboxd-ics is a package to render a [Letterboxd](http://letterboxd.com)
 diary in iCalendar format.
-
-[![Build Status for {{ site.github.repository_nwo }}](https://api.travis-ci.com/{{ site.github.repository_nwo }}.svg?branch=master)](https://travis-ci.com/{{ site.github.repository_nwo }})
 
 ## How to install (standalone)
 
