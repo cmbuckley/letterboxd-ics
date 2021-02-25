@@ -11,6 +11,6 @@ deploy:
   provider: heroku
   app: letterboxd-ical
   on:
-    php: 7.3
+    php: 7.4
   api_key:
     secure: Nr2Q2tvyhs/XNszqOWrWARHnRKNewZPYs5hnkOmv/ZKuk1k6SOG7ki10bhLI4AS2s7+WE3NAhuHIwJZzFRuYojekuJSAQY9WESvc7Q3Oofi59q1AZ+nEkU3Q7CJ87vPizF3LleHiYTweT3n4zdY8Y6sBGJDfvwLmMa/H0nfBMAI=
