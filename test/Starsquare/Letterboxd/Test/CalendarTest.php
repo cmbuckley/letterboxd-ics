@@ -15,12 +15,12 @@ class CalendarTest extends TestCase {
     protected $logStream;
     protected $log;
 
-    protected function setUp() {
+    protected function setUp(): void {
         $this->logStream = fopen('/dev/null', 'w');
         $this->log = new Logger($this->logStream);
     }
 
-    protected function tearDown() {
+    protected function tearDown(): void {
         if (file_exists($this->zipFile)) {
             unlink($this->zipFile);
         }
