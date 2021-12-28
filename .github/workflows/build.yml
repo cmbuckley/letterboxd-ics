@@ -1,0 +1,22 @@
+name: Build
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v5
+      - uses: php-actions/phpunit@v3
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'master' }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: letterboxd-ical
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+        env:
+          HD_LETTERBOXD_USERNAME: ${{ secrets.LETTERBOXD_USERNAME }}
+          HD_LETTERBOXD_PASSWORD: ${{ secrets.LETTERBOXD_PASSWORD }}

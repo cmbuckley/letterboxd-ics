@@ -1,7 +1,7 @@
 letterboxd-ics is a package to render a [Letterboxd](https://letterboxd.com)
 diary in iCalendar format.
 
-[![Build Status](https://travis-ci.org/cmbuckley/letterboxd-ics.svg)](https://travis-ci.org/cmbuckley/letterboxd-ics)
+[![Build Status](https://github.com/cmbuckley/letterboxd-ics/actions/workflows/build.yml/badge.svg)](https://github.com/cmbuckley/letterboxd-ics/actions/workflows/build.yml)
 
 ## How to install (standalone)
 
@@ -19,13 +19,21 @@ a Web server at the `public` folder.
 
 ## How to install (Heroku)
 
-Fork the repository and update `.travis.yml`:
+Fork the repository and set the following secrets:
+
+* `LETTERBOXD_USERNAME`
+* `LETTERBOXD_PASSWORD`
+* `HEROKU_EMAIL` --- your Heroku email address
+* `HEROKU_API_KEY` --- your API key from Heroku's [Account Settings](https://dashboard.heroku.com/account)
+
+Then create the app and update `.github/workflows/deploy.yml`:
 
 ```bash
 heroku apps:create my-custom-app-name
-travis encrypt $(heroku auth:token) --add deploy.api_key
-sed -i'' 's/letterboxd-ical/my-custom-app-name/' .travis.yml
+sed -i'' 's/letterboxd-ical/my-custom-app-name/' .github/workflows/deploy.yml
 ```
+
+When you push these changes, your app will be deployed.
 
 ## How to install (Packagist)
 
