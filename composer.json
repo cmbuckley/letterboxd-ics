@@ -19,7 +19,7 @@
         "source": "https://github.com/cmbuckley/letterboxd-ics"
     },
     "require": {
-        "php": "^7",
+        "php": "^8",
         "kriswallsmith/buzz": "^1.2.0",
         "eluceo/ical": "^0.14",
         "nyholm/psr7": "^1.3"
