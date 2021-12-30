@@ -1,7 +1,7 @@
 ---
 layout: showcase
 title: letterboxd-ics
-travis: true
+build: build.yml
 ---
 
 letterboxd-ics is a package to render a [Letterboxd](https://letterboxd.com)
