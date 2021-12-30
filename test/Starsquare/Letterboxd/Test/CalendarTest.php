@@ -169,6 +169,7 @@ class CalendarTest extends TestCase {
 
     public function testOutputFile() {
         $calendar = new Calendar(array(
+            'version' => '1.2.3',
             'log' => $this->log,
             'calendar' => array(
                 'name' => 'Test',
