@@ -3,11 +3,18 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
+    name: Test (PHP ${{ matrix.php-versions }})
+    strategy:
+      matrix:
+        php-versions:
+          - 8.0
+          - 8.1
     steps:
       - uses: actions/checkout@v2
       - uses: php-actions/composer@v5
       - uses: php-actions/phpunit@v3
         with:
+          php_version: ${{ matrix.php-versions }}
           php_extensions: zip
   deploy:
     runs-on: ubuntu-latest
