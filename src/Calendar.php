@@ -13,7 +13,6 @@ use Eluceo\iCal\Component\Calendar as BaseCalendar;
 use Eluceo\iCal\Component\Event;
 
 class Calendar extends BaseCalendar {
-    const VERSION = '3.2.0';
     const PROD_ID = '-//StarSquare//LETTERBOXD//%s//EN';
     const USER_AGENT = 'letterboxd-ics/%s (https://bux.re/letterboxd-ics) PHP/%s';
     const CSRF_TOKEN = '__csrf';
@@ -40,8 +39,9 @@ class Calendar extends BaseCalendar {
      * Calendar options
      */
     protected $options = array(
-        'auth'   => array(),
-        'output' => array(
+        'version' => 'x.x.x',
+        'auth'    => array(),
+        'output'  => array(
             'headers'      => true,
             'errors'       => false,
             'content-type' => 'text/calendar',
@@ -75,8 +75,8 @@ class Calendar extends BaseCalendar {
     protected $log = null;
 
     public function __construct($options = array()) {
-        parent::__construct(sprintf(static::PROD_ID, static::VERSION));
         $this->setOptions($options);
+        parent::__construct(sprintf(static::PROD_ID, $this->options['version']));
 
         if (!isset($this->options['log'])) {
             $this->options['log'] = new Logger('php://stderr');
@@ -122,7 +122,7 @@ class Calendar extends BaseCalendar {
         if ($this->userAgent === null) {
             $this->userAgent = sprintf(
                 static::USER_AGENT,
-                static::VERSION,
+                $this->options['version'],
                 phpversion()
             );
         }
