@@ -9,7 +9,7 @@ diary in iCalendar format.
 
 ## How to install (Heroku)
 
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/cmbuckley/letterboxd-ics)
 
 Make sure you set the following secrets:
 
