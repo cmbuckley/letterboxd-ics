@@ -7,6 +7,26 @@ build: build.yml
 letterboxd-ics is a package to render a [Letterboxd](https://letterboxd.com)
 diary in iCalendar format.
 
+## How to install (Heroku)
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+Make sure you set the following secrets:
+
+* `LETTERBOXD_USERNAME`
+* `LETTERBOXD_PASSWORD`
+* `HEROKU_EMAIL` --- your Heroku email address
+* `HEROKU_API_KEY` --- your API key from Heroku's [Account Settings](https://dashboard.heroku.com/account)
+
+If you choose to deploy from a fork instead, make sure you update the app name:
+
+```bash
+heroku apps:create my-custom-app-name
+sed -i'' 's/letterboxd-ical/my-custom-app-name/' .github/workflows/deploy.yml
+```
+
+When you push these changes, your app will be deployed.
+
 ## How to install (standalone)
 
 If you want to use the standalone package, you can do the following:
@@ -20,24 +40,6 @@ composer install
 Once you have the package and its dependencies, set environment variables
 `LETTERBOXD_USERNAME` and `LETTERBOXD_PASSWORD` to your credentials, then point
 a Web server at the `public` folder.
-
-## How to install (Heroku)
-
-Fork the repository and set the following secrets:
-
-* `LETTERBOXD_USERNAME`
-* `LETTERBOXD_PASSWORD`
-* `HEROKU_EMAIL` --- your Heroku email address
-* `HEROKU_API_KEY` --- your API key from Heroku's [Account Settings](https://dashboard.heroku.com/account)
-
-Then create the app and update `.github/workflows/deploy.yml`:
-
-```bash
-heroku apps:create my-custom-app-name
-sed -i'' 's/letterboxd-ical/my-custom-app-name/' .github/workflows/deploy.yml
-```
-
-When you push these changes, your app will be deployed.
 
 ## How to install (Packagist)
 
