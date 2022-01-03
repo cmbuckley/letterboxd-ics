@@ -1,0 +1,26 @@
+{
+  "name": "Letterboxd iCal",
+  "description": "Export Letterboxd diary to iCalendar format",
+  "keywords": ["letterboxd", "calendar", "ical", "ics"],
+  "website": "https://cmbuckley.co.uk/letterboxd-ics/",
+  "repository": "https://github.com/cmbuckley/letterboxd-ics",
+  "success_url": "/",
+  "env": {
+    "LETTERBOXD_USERNAME": {
+      "description": "The username or email used to log in to Letterboxd",
+      "required": true
+    },
+    "LETTERBOXD_PASSWORD": {
+      "description": "Your Letterboxd password",
+      "required": true
+    },
+    "HEROKU_EMAIL": {
+      "description": "Your Heroku email",
+      "required": true
+    },
+    "HEROKU_API_KEY": {
+      "description": "An API key from Heroku's Account Settings",
+      "required": true
+    }
+  }
+}
