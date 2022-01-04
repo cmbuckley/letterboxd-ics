@@ -11,10 +11,13 @@ Make sure you set the following secrets:
 
 * `LETTERBOXD_USERNAME`
 * `LETTERBOXD_PASSWORD`
+
+If you choose to deploy from a fork instead, you also need to set the following secrets for the Heroku deployment:
+
 * `HEROKU_EMAIL` --- your Heroku email address
 * `HEROKU_API_KEY` --- your API key from Heroku's [Account Settings](https://dashboard.heroku.com/account)
 
-If you choose to deploy from a fork instead, make sure you update the app name:
+Also, make sure you update the app name:
 
 ```bash
 heroku apps:create my-custom-app-name
