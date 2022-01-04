@@ -13,14 +13,6 @@
     "LETTERBOXD_PASSWORD": {
       "description": "Your Letterboxd password",
       "required": true
-    },
-    "HEROKU_EMAIL": {
-      "description": "Your Heroku email",
-      "required": true
-    },
-    "HEROKU_API_KEY": {
-      "description": "An API key from Heroku's Account Settings",
-      "required": true
     }
   }
 }
