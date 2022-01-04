@@ -11,22 +11,15 @@ diary in iCalendar format.
 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/cmbuckley/letterboxd-ics)
 
-Make sure you set the following secrets:
+The installation will prompt you to set the `LETTERBOXD_USERNAME` and `LETTERBOXD_PASSWORD` secrets.
+
+If you choose to deploy from a fork instead, you need to set the following repository secrets for the Heroku deployment:
 
 * `LETTERBOXD_USERNAME`
 * `LETTERBOXD_PASSWORD`
-
-If you choose to deploy from a fork instead, you also need to set the following secrets for the Heroku deployment:
-
+* `HEROKU_APP_NAME` --- you should create this app beforehand
 * `HEROKU_EMAIL` --- your Heroku email address
 * `HEROKU_API_KEY` --- your API key from Heroku's [Account Settings](https://dashboard.heroku.com/account)
-
-Also, make sure you update the app name:
-
-```bash
-heroku apps:create my-custom-app-name
-sed -i'' 's/letterboxd-ical/my-custom-app-name/' .github/workflows/deploy.yml
-```
 
 When you push these changes, your app will be deployed.
 
