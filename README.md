@@ -13,7 +13,7 @@ If you choose to deploy from a fork instead, you need to set the following repos
 
 * `LETTERBOXD_USERNAME`
 * `LETTERBOXD_PASSWORD`
-* `HEROKU_APP_NAME` — you should create this app beforehand
+* `HEROKU_APP_NAME` — will be created if it doesn’t exist
 * `HEROKU_EMAIL` — your Heroku email address
 * `HEROKU_API_KEY` — your API key from Heroku’s [Account Settings](https://dashboard.heroku.com/account)
 
