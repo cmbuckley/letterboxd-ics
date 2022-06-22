@@ -2,7 +2,7 @@
 
 namespace Starsquare\Letterboxd\Test;
 
-use Starsquare\Letterboxd\Calendar;
+use Starsquare\Letterboxd\CalendarRenderer;
 use Starsquare\Letterboxd\Logger;
 use Starsquare\Letterboxd\Exception as LetterboxdException;
 use Buzz\Browser;
@@ -10,7 +10,7 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\Stub\ConsecutiveCalls;
 
-class CalendarTest extends TestCase {
+class CalendarRendererTest extends TestCase {
     protected $zipFile = 'test/etc/diary.zip';
     protected $logStream;
     protected $log;
@@ -64,7 +64,7 @@ class CalendarTest extends TestCase {
 
 
     protected function assertLogin($getResponse, $submitResponse = null) {
-        $calendar = new CalendarStub(array(
+        $renderer = new CalendarRendererStub(array(
             'log' => $this->log,
             'auth' => array(
                 'username' => 'foo',
@@ -73,7 +73,7 @@ class CalendarTest extends TestCase {
         ));
 
         $browser = $this->createMock(Browser::class);
-        $calendar->setBrowser($browser);
+        $renderer->setBrowser($browser);
 
         $multiGet = ($getResponse instanceof ConsecutiveCalls);
 
@@ -92,36 +92,36 @@ class CalendarTest extends TestCase {
                 ->will($this->returnValue($this->getResponse($submitResponse)));
         }
 
-        $calendar->loadEvents();
+        $renderer->loadEvents();
     }
 
     public function testMissingOptionsFile() {
         $this->expectException(LetterboxdException::class, 'Cannot find options file');
-        new Calendar('/missing/file');
+        new CalendarRenderer('/missing/file');
     }
 
     public function testNonJsonOptionsFile() {
         $this->expectException(LetterboxdException::class, 'Cannot parse options file as JSON');
-        new Calendar('test/etc/diary.csv');
+        new CalendarRenderer('test/etc/diary.csv');
     }
 
     public function testBadOptions() {
         $this->expectException(LetterboxdException::class, 'Options must be array or path to options file');
-        new Calendar(4);
+        new CalendarRenderer(4);
     }
 
     public function testGetBrowser() {
-        $calendar = new Calendar();
+        $renderer = new CalendarRenderer();
 
-        $browser = $calendar->getBrowser();
+        $browser = $renderer->getBrowser();
         $this->assertInstanceof(Browser::class, $browser);
     }
 
     public function testMissingCredentials() {
-        $calendar = new Calendar();
+        $renderer = new CalendarRenderer();
 
         $this->expectException(LetterboxdException::class, 'Missing username/password');
-        $calendar->loadEvents();
+        $renderer->loadEvents();
     }
 
     public function testLogin() {
@@ -168,7 +168,7 @@ class CalendarTest extends TestCase {
     }
 
     public function testOutputFile() {
-        $calendar = new Calendar(array(
+        $renderer = new CalendarRenderer(array(
             'version' => '1.2.3',
             'log' => $this->log,
             'calendar' => array(
@@ -182,31 +182,31 @@ class CalendarTest extends TestCase {
         ));
 
         $expected = trim(file_get_contents('test/etc/events.ics'));
-        $this->assertStringMatchesFormat($expected, str_replace("\r", '', $calendar));
+        $this->assertStringMatchesFormat($expected, str_replace("\r", '', $renderer));
     }
 
     public function testMissingEventFile() {
-        $calendar = new Calendar(array(
+        $renderer = new CalendarRenderer(array(
             'log' => $this->log,
             'file' => '/missing/file',
         ));
 
         $this->expectException(LetterboxdException::class, 'Cannot find event file');
-        $calendar->loadEvents();
+        $renderer->loadEvents();
     }
 
     public function testInvalidZip() {
-        $calendar = new Calendar(array(
+        $renderer = new CalendarRenderer(array(
             'log' => $this->log,
             'file' => 'zip://test/etc/diary.zip#missing.csv',
         ));
 
         $this->expectException(LetterboxdException::class, 'Cannot find event file');
-        $calendar->loadEvents();
+        $renderer->loadEvents();
     }
 
     public function testOutputErrors() {
-        $calendar = new Calendar(array(
+        $renderer = new CalendarRenderer(array(
             'log' => $this->log,
             'file' => '/missing/file',
             'output' => array(
@@ -214,7 +214,7 @@ class CalendarTest extends TestCase {
             ),
         ));
 
-        $this->assertStringStartsWith('Cannot find event file', (string) $calendar);
+        $this->assertStringStartsWith('Cannot find event file', (string) $renderer);
     }
 
     /**
@@ -225,7 +225,7 @@ class CalendarTest extends TestCase {
             $this->markTestSkipped('Needs Xdebug to retrieve headers');
         }
 
-        $calendar = new Calendar(array(
+        $renderer = new CalendarRenderer(array(
             'log' => $this->log,
             'calendar' => array(
                 'name' => 'Test',
@@ -234,7 +234,7 @@ class CalendarTest extends TestCase {
             'file' => 'test/etc/diary.csv',
         ));
 
-        $calendar->sendHeaders();
+        $renderer->sendHeaders();
         $headers = xdebug_get_headers();
 
         $this->assertSame('Content-Type: text/calendar; charset=utf-8', $headers[0]);
@@ -245,7 +245,7 @@ class CalendarTest extends TestCase {
     }
 }
 
-class CalendarStub extends Calendar {
+class CalendarRendererStub extends CalendarRenderer {
     public function setBrowser($browser) {
         $this->browser = $browser;
     }
