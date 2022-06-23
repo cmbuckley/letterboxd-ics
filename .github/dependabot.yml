@@ -4,6 +4,9 @@ updates:
     directory: /
     schedule:
       interval: daily
+    ignore:
+      - dependency-name: php-actions/phpunit
+        versions: ["v7", "v8", "v9"]
   - package-ecosystem: composer
     directory: /
     schedule:
