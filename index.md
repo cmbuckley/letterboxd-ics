@@ -13,16 +13,6 @@ diary in iCalendar format.
 
 The installation will prompt you to set the `LETTERBOXD_USERNAME` and `LETTERBOXD_PASSWORD` secrets.
 
-If you choose to deploy from a fork instead, you need to set the following repository secrets for the Heroku deployment:
-
-* `LETTERBOXD_USERNAME`
-* `LETTERBOXD_PASSWORD`
-* `HEROKU_APP_NAME` --- will be created if it doesn't exist
-* `HEROKU_EMAIL` --- your Heroku email address
-* `HEROKU_API_KEY` --- your API key from Heroku's [Account Settings](https://dashboard.heroku.com/account)
-
-When you push these changes, your app will be deployed.
-
 ## How to install (standalone)
 
 If you want to use the standalone package, you can do the following:
