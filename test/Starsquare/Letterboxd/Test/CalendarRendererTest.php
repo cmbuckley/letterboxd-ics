@@ -7,8 +7,8 @@ use Starsquare\Letterboxd\Logger;
 use Starsquare\Letterboxd\Exception as LetterboxdException;
 use Buzz\Browser;
 use Nyholm\Psr7\Factory\Psr17Factory;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\Stub\ConsecutiveCalls;
 
 class CalendarRendererTest extends TestCase {
     protected $zipFile = 'test/etc/diary.zip';
@@ -75,21 +75,22 @@ class CalendarRendererTest extends TestCase {
         $browser = $this->createMock(Browser::class);
         $renderer->setBrowser($browser);
 
-        $multiGet = ($getResponse instanceof ConsecutiveCalls);
-
         if (is_string($getResponse)) {
-            $getResponse = $this->returnValue($this->getResponse($getResponse));
+            $getResponse = [$this->getResponse($getResponse)];
         }
 
-        $browser->expects($multiGet ? $this->any() : $this->once())
+        $urls = ['https://letterboxd.com/', 'https://letterboxd.com/data/export/'];
+        array_walk($getResponse, fn(&$v, $k) => $v = [$urls[$k], [], $v]);
+
+        $browser->expects($this->exactly(count($getResponse)))
             ->method('get')
-            ->will($getResponse);
+            ->willReturnMap($getResponse);
 
         if ($submitResponse) {
             $browser->expects($this->once())
                 ->method('submitForm')
                 ->with('https://letterboxd.com/user/login.do', array('__csrf' => 'DUMMY', 'username' => 'foo', 'password' => 'bar'), 'POST')
-                ->will($this->returnValue($this->getResponse($submitResponse)));
+                ->willReturn($this->getResponse($submitResponse));
         }
 
         $renderer->loadEvents();
@@ -125,10 +126,10 @@ class CalendarRendererTest extends TestCase {
     }
 
     public function testLogin() {
-        $this->assertLogin($this->onConsecutiveCalls(
+        $this->assertLogin([
             $this->getResponse('test/etc/http/home'),
             $this->getExportResponse()
-        ), 'test/etc/http/login');
+        ], 'test/etc/http/login');
     }
 
     public function testMissingCsrfToken() {
@@ -153,18 +154,18 @@ class CalendarRendererTest extends TestCase {
 
     public function testLoginBadExportHttpResponse() {
         $this->expectException(LetterboxdException::class, 'Cannot read export: Received HTTP 400');
-        $this->assertLogin($this->onConsecutiveCalls(
+        $this->assertLogin([
             $this->getResponse('test/etc/http/home'),
             $this->getResponse('HTTP/1.1 400 Bad Request')
-        ), 'test/etc/http/login');
+        ], 'test/etc/http/login');
     }
 
     public function testLoginBadExportData() {
         $this->expectException(LetterboxdException::class, 'Cannot read export: Did not respond with a ZIP file');
-        $this->assertLogin($this->onConsecutiveCalls(
+        $this->assertLogin([
             $this->getResponse('test/etc/http/home'),
             $this->getResponse('HTTP/1.1 200 OK')
-        ), 'test/etc/http/login');
+        ], 'test/etc/http/login');
     }
 
     public function testOutputFile() {
@@ -217,9 +218,7 @@ class CalendarRendererTest extends TestCase {
         $this->assertStringStartsWith('Cannot find event file', (string) $renderer);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testSendHeaders() {
         if (!function_exists('xdebug_get_headers')) {
             $this->markTestSkipped('Needs Xdebug to retrieve headers');

@@ -19,7 +19,7 @@ class CalendarRenderer {
     const PROD_ID = '-//StarSquare//LETTERBOXD//%s//EN';
     const USER_AGENT = 'letterboxd-ics/%s (https://bux.re/letterboxd-ics) PHP/%s';
     const CSRF_TOKEN = '__csrf';
-    const CSRF_PATTERN = '/CSRF = "(?P<token>[^"]+)"/';
+    const CSRF_PATTERN = '/CSRF = ("|\')(?P<token>.+?)\1/';
 
     protected $urls = array(
         'home'   => 'https://letterboxd.com/',

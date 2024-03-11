@@ -25,20 +25,9 @@ class CalendarFactory extends BaseCalendarFactory
     /**
      * @return Generator<Property>
      */
-    private function getProperties(BaseCalendar $calendar): Generator
+    protected function getProperties(BaseCalendar $calendar): Generator
     {
-        /* @see https://www.ietf.org/rfc/rfc5545.html#section-3.7.3 */
-        yield new Property('PRODID', new TextValue($calendar->getProductIdentifier()));
-        /* @see https://www.ietf.org/rfc/rfc5545.html#section-3.7.4 */
-        yield new Property('VERSION', new TextValue('2.0'));
-        /* @see https://www.ietf.org/rfc/rfc5545.html#section-3.7.1 */
-        yield new Property('CALSCALE', new TextValue('GREGORIAN'));
-
-        $publishedTTL = $calendar->getPublishedTTL();
-        if ($publishedTTL) {
-            /* @see https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-oxcical/1fc7b244-ecd1-4d28-ac0c-2bb4df855a1f */
-            yield new Property('X-PUBLISHED-TTL', new DurationValue($publishedTTL));
-        }
+        yield from parent::getProperties($calendar);
 
         $name = $calendar->getName();
         if ($name) {
