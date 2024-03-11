@@ -1,7 +1,7 @@
 {
     "name": "cmbuckley/letterboxd-ics",
     "description": "Export Letterboxd diary to iCalendar format",
-    "version": "6.0.0",
+    "version": "7.0.1",
     "type": "library",
     "keywords": ["letterboxd", "calendar", "ical", "ics"],
     "homepage": "https://cmbuckley.co.uk/letterboxd-ics/",
