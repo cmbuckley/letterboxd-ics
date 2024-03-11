@@ -31,7 +31,7 @@ so it can be specified as a dependency using [Composer](https://getcomposer.org)
 ```json
 {
     "require": {
-        "cmbuckley/letterboxd-ics": "~6.0"
+        "cmbuckley/letterboxd-ics": "^7.0"
     }
 }
 ```
