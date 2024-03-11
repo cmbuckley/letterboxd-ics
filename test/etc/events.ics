@@ -9,7 +9,7 @@ DTSTAMP:%dT%dZ
 SUMMARY:Test
 DESCRIPTION:Year: 2013\nRating: ½
 URL:https://letterboxd.com/film/test-2013/
-DTSTART:20130101
+DTSTART;VALUE=DATE:20130101
 END:VEVENT
 BEGIN:VEVENT
 UID:%x
@@ -17,7 +17,7 @@ DTSTAMP:%dT%dZ
 SUMMARY:Test Pilot
 DESCRIPTION:Year: 1938\nRating: ★
 URL:https://letterboxd.com/film/test-pilot/
-DTSTART:20130102
+DTSTART;VALUE=DATE:20130102
 END:VEVENT
 BEGIN:VEVENT
 UID:%x
@@ -25,7 +25,7 @@ DTSTAMP:%dT%dZ
 SUMMARY:The Tested
 DESCRIPTION:Year: 2011\nRating: ★½
 URL:https://letterboxd.com/film/the-tested/
-DTSTART:20130103
+DTSTART;VALUE=DATE:20130103
 END:VEVENT
 BEGIN:VEVENT
 UID:%x
@@ -33,7 +33,7 @@ DTSTAMP:%dT%dZ
 SUMMARY:This Is Not a Test
 DESCRIPTION:Year: 2009\nRating: ★★
 URL:https://letterboxd.com/film/this-is-not-a-test/
-DTSTART:20130104
+DTSTART;VALUE=DATE:20130104
 END:VEVENT
 BEGIN:VEVENT
 UID:%x
@@ -41,7 +41,7 @@ DTSTAMP:%dT%dZ
 SUMMARY:The Test
 DESCRIPTION:Year: 1935\nRating: ★★½
 URL:https://letterboxd.com/film/the-test/
-DTSTART:20130105
+DTSTART;VALUE=DATE:20130105
 END:VEVENT
 BEGIN:VEVENT
 UID:%x
@@ -49,7 +49,7 @@ DTSTAMP:%dT%dZ
 SUMMARY:The Final Test
 DESCRIPTION:Year: 1954\nRating: ★★★
 URL:https://letterboxd.com/film/the-final-test/
-DTSTART:20130106
+DTSTART;VALUE=DATE:20130106
 END:VEVENT
 BEGIN:VEVENT
 UID:%x
@@ -57,7 +57,7 @@ DTSTAMP:%dT%dZ
 SUMMARY:Crash Test
 DESCRIPTION:Year: 2003\nRating: ★★★★
 URL:https://letterboxd.com/film/crash-test/
-DTSTART:20130107
+DTSTART;VALUE=DATE:20130107
 END:VEVENT
 BEGIN:VEVENT
 UID:%x
@@ -65,7 +65,7 @@ DTSTAMP:%dT%dZ
 SUMMARY:Rabbit Test
 DESCRIPTION:Year: 1978\nRating: ★★★★★
 URL:https://letterboxd.com/film/rabbit-test/
-DTSTART:20130108
+DTSTART;VALUE=DATE:20130108
 END:VEVENT
 BEGIN:VTIMEZONE
 TZID:UTC
