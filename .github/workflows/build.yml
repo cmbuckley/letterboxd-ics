@@ -14,7 +14,7 @@ jobs:
         with:
           php_version: ${{ matrix.php-versions }}
           php_extensions: zip
-      - uses: php-actions/phpunit@v3
+      - uses: php-actions/phpunit@v4
         with:
           php_version: ${{ matrix.php-versions }}
           php_extensions: zip
