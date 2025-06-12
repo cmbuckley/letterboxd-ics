@@ -54,6 +54,7 @@ class CalendarRendererTest extends TestCase {
         $zip = new \ZipArchive();
         $zip->open($this->zipFile, $zip::CREATE);
         $zip->addFile('test/etc/diary.csv', 'diary.csv');
+        $zip->addFile('test/etc/reviews.csv', 'reviews.csv');
         $zip->close();
 
         $factory = new Psr17Factory;

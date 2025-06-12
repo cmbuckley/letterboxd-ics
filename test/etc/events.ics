@@ -39,7 +39,7 @@ BEGIN:VEVENT
 UID:%x
 DTSTAMP:%dT%dZ
 SUMMARY:The Test
-DESCRIPTION:Year: 1935\nRating: ★★½
+DESCRIPTION:Year: 1935\nRating: ★★½\n\nThis is a review of The Test
 URL:https://letterboxd.com/film/the-test/
 DTSTART;VALUE=DATE:20130105
 END:VEVENT
