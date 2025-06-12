@@ -236,7 +236,7 @@ class CalendarRenderer {
 
             $this->log->info('Parsing diary CSV');
 
-            while (false !== ($row = fgetcsv($diary))) {
+            while (false !== ($row = fgetcsv($diary, escape: '\\'))) {
                 if ($headers === null) {
                     $headers = $row;
                 } else {
