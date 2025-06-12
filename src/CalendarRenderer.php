@@ -270,17 +270,25 @@ class CalendarRenderer {
        return sprintf($template, $year, $ratingText);
     }
 
-    public function sendHeaders() {
-        if ($this->options['output']['headers'] && !headers_sent()) {
-            header(sprintf(
+    public function getHeaders() {
+        return [
+            sprintf(
                 'Content-Type: %s; charset=%s',
                 $this->options['output']['content-type'],
                 $this->options['output']['charset']
-            ));
-            header('Cache-Control: no-cache, must-revalidate');
-            header('Expires: Sat, 29 Sep 1984 15:00:00 GMT');
-            header('Last-Modified: Sat, 29 Sep 1984 15:00:00 GMT');
-            header('ETag: "' . md5($this->output) . '"');
+            ),
+            'Cache-Control: no-cache, must-revalidate',
+            'Expires: Sat, 29 Sep 1984 15:00:00 GMT',
+            'Last-Modified: Sat, 29 Sep 1984 15:00:00 GMT',
+            'ETag: "' . md5($this->output ?? '') . '"',
+        ];
+    }
+
+    public function sendHeaders() {
+        if ($this->options['output']['headers'] && !headers_sent()) {
+            foreach ($this->getHeaders() as $header) {
+                header($header);
+            }
         }
     }
 

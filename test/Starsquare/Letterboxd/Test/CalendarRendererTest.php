@@ -218,12 +218,7 @@ class CalendarRendererTest extends TestCase {
         $this->assertStringStartsWith('Cannot find event file', (string) $renderer);
     }
 
-    #[RunInSeparateProcess]
-    public function testSendHeaders() {
-        if (!function_exists('xdebug_get_headers')) {
-            $this->markTestSkipped('Needs Xdebug to retrieve headers');
-        }
-
+    public function testGetHeaders() {
         $renderer = new CalendarRenderer(array(
             'log' => $this->log,
             'calendar' => array(
@@ -233,14 +228,13 @@ class CalendarRendererTest extends TestCase {
             'file' => 'test/etc/diary.csv',
         ));
 
-        $renderer->sendHeaders();
-        $headers = xdebug_get_headers();
+        $headers = $renderer->getHeaders();
 
         $this->assertSame('Content-Type: text/calendar; charset=utf-8', $headers[0]);
         $this->assertSame('Cache-Control: no-cache, must-revalidate', $headers[1]);
         $this->assertSame('Expires: Sat, 29 Sep 1984 15:00:00 GMT', $headers[2]);
         $this->assertSame('Last-Modified: Sat, 29 Sep 1984 15:00:00 GMT', $headers[3]);
-        $this->assertRegExp('/ETag: "[0-9a-f]{32}"/', $headers[4]);
+        $this->assertMatchesRegularExpression('/ETag: "[0-9a-f]{32}"/', $headers[4]);
     }
 }
 
