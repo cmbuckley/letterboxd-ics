@@ -36,6 +36,7 @@ class CalendarRenderer {
         'url'     => 'Letterboxd URI',
         'rating'  => 'Rating',
         'year'    => 'Year',
+        'review'  => 'Review',
     );
 
     /**
@@ -210,7 +211,7 @@ class CalendarRenderer {
                 }
 
                 $contentType = $export->getHeader('Content-Type');
-                if (strpos($contentType[0], 'application/zip') === false) {
+                if (count($contentType) == 0 || strpos($contentType[0] ?? '', 'application/zip') === false) {
                     throw new Exception('Cannot read export: Did not respond with a ZIP file');
                 }
 
@@ -224,34 +225,56 @@ class CalendarRenderer {
         return $this->file;
     }
 
+    protected function parseFile($fileName, $rowCallback) {
+        $file = @fopen($fileName, 'r');
+        $headers = null;
+
+        if ($file === false) {
+            $error = error_get_last();
+            throw new Exception("Cannot find file: " . $error['message']);
+        }
+
+        while (false !== ($row = fgetcsv($file, escape: '\\'))) {
+            if ($headers === null) {
+                $headers = $row;
+            } else {
+                $row = array_combine($headers, $row);
+                $rowCallback($row);
+            }
+        }
+
+        fclose($file);
+    }
+
     public function loadEvents() {
         if (!iterator_count($this->calendar->getEvents())) {
-            $diary = @fopen($this->getFile(), 'r');
-            $headers = null;
+            $file = $this->getFile();
+            $reviews = [];
 
-            if ($diary === false) {
-                $error = error_get_last();
-                throw new Exception("Cannot find event file: " . $error['message']);
+            if (str_starts_with($file, 'zip://')) {
+                $this->log->info('Retrieving reviews from ZIP');
+
+                $this->parseFile(str_replace('diary', 'reviews', $file), function ($row) use (&$reviews) {
+                    $reviews[$row[$this->headers['url']]] = $row[$this->headers['review']];
+                });
             }
 
             $this->log->info('Parsing diary CSV');
+            $this->parseFile($file, function ($row) use ($reviews) {
+                $date = new \DateTime($row[$this->headers['date']]);
 
-            while (false !== ($row = fgetcsv($diary, escape: '\\'))) {
-                if ($headers === null) {
-                    $headers = $row;
-                } else {
-                    $row = array_combine($headers, $row);
-                    $date = new \DateTime($row[$this->headers['date']]);
-
-                    $event = (new Event)
-                        ->setSummary($row[$this->headers['summary']])
-                        ->setDescription($this->getEventDescription($row))
-                        ->setOccurrence(new SingleDay(new Date($date)))
-                        ->setUrl(new Uri($row[$this->headers['url']]));
-
-                    $this->calendar->addEvent($event);
+                if (!empty($reviews[$row[$this->headers['url']]])) {
+                    $row[$this->headers['review']] = $reviews[$row[$this->headers['url']]];
                 }
-            }
+
+                $event = (new Event)
+                    ->setSummary($row[$this->headers['summary']])
+                    ->setDescription($this->getEventDescription($row))
+                    ->setOccurrence(new SingleDay(new Date($date)))
+                    ->setUrl(new Uri($row[$this->headers['url']]));
+
+                $this->calendar->addEvent($event);
+            });
 
             $this->log->info('Parsing complete');
         }
@@ -262,6 +285,10 @@ class CalendarRenderer {
            'Year: %d',
            'Rating: %s',
        ]);
+
+       if (!empty($data[$this->headers['review']])) {
+           $template .= "\n\n" . $data[$this->headers['review']];
+       }
 
        $year       = $data[$this->headers['year']];
        $rating     = $data[$this->headers['rating']];
