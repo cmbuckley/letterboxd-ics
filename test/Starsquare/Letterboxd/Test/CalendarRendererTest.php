@@ -38,10 +38,11 @@ class CalendarRendererTest extends TestCase {
         $pos = (strpos($raw, "\n\n") ?: strlen($raw));
         $headers = explode("\n", substr($raw, 0, $pos));
         $body = (string) substr($raw, $pos + 2);
-        $statusLine = array_shift($headers);
+        $statusLine = explode(' ', array_shift($headers), 3);
 
         $factory = new Psr17Factory;
-        $response = $factory->createResponse(200)->withBody($factory->createStream($body));
+        $response = $factory->createResponse($statusLine[1], $statusLine[2])
+            ->withBody($factory->createStream($body));
         foreach ($headers as $header) {
             list($header, $value) = explode(':', $header, 2);
             $response = $response->withHeader($header, $value);
@@ -66,10 +67,15 @@ class CalendarRendererTest extends TestCase {
 
     protected function assertLogin($getResponse, $submitResponse = null) {
         $renderer = new CalendarRendererStub(array(
+            'version' => '1.2.3',
             'log' => $this->log,
             'auth' => array(
                 'username' => 'foo',
                 'password' => 'bar',
+            ),
+            'calendar' => array(
+                'name' => 'Test',
+                'timezone' => 'UTC',
             ),
         ));
 
@@ -95,20 +101,24 @@ class CalendarRendererTest extends TestCase {
         }
 
         $renderer->loadEvents();
+        return $renderer;
     }
 
     public function testMissingOptionsFile() {
-        $this->expectException(LetterboxdException::class, 'Cannot find options file');
+        $this->expectException(LetterboxdException::class);
+        $this->expectExceptionMessage('Cannot find options file');
         new CalendarRenderer('/missing/file');
     }
 
     public function testNonJsonOptionsFile() {
-        $this->expectException(LetterboxdException::class, 'Cannot parse options file as JSON');
+        $this->expectException(LetterboxdException::class);
+        $this->expectExceptionMessage('Cannot parse options file as JSON');
         new CalendarRenderer('test/etc/diary.csv');
     }
 
     public function testBadOptions() {
-        $this->expectException(LetterboxdException::class, 'Options must be array or path to options file');
+        $this->expectException(LetterboxdException::class);
+        $this->expectExceptionMessage('Options must be array or path to options file');
         new CalendarRenderer(4);
     }
 
@@ -122,39 +132,48 @@ class CalendarRendererTest extends TestCase {
     public function testMissingCredentials() {
         $renderer = new CalendarRenderer();
 
-        $this->expectException(LetterboxdException::class, 'Missing username/password');
+        $this->expectException(LetterboxdException::class);
+        $this->expectExceptionMessage('Missing username/password');
         $renderer->loadEvents();
     }
 
     public function testLogin() {
-        $this->assertLogin([
+        $renderer = $this->assertLogin([
             $this->getResponse('test/etc/http/home'),
-            $this->getExportResponse()
+            $this->getExportResponse(),
         ], 'test/etc/http/login');
+
+        $expected = trim(file_get_contents('test/etc/events.ics'));
+        $this->assertStringMatchesFormat($expected, str_replace("\r", '', $renderer));
     }
 
     public function testMissingCsrfToken() {
-        $this->expectException(LetterboxdException::class, 'Cannot find CSRF token');
+        $this->expectException(LetterboxdException::class);
+        $this->expectExceptionMessage('Cannot find CSRF token');
         $this->assertLogin('HTTP/1.1 200 OK');
     }
 
     public function testLoginBadHttpResponse() {
-        $this->expectException(LetterboxdException::class, 'Received HTTP 400');
+        $this->expectException(LetterboxdException::class);
+        $this->expectExceptionMessage('Cannot log in: Received HTTP 400');
         $this->assertLogin('test/etc/http/home', 'HTTP/1.1 400 Bad Request');
     }
 
     public function testLoginNotJson() {
-        $this->expectException(LetterboxdException::class, 'Could not decode response as JSON');
+        $this->expectException(LetterboxdException::class);
+        $this->expectExceptionMessage('Cannot log in: Could not decode response as JSON');
         $this->assertLogin('test/etc/http/home', 'HTTP/1.1 200 OK');
     }
 
     public function testLoginError() {
-        $this->expectException(LetterboxdException::class, 'Cannot log in: error message');
+        $this->expectException(LetterboxdException::class);
+        $this->expectExceptionMessage('Cannot log in: error message');
         $this->assertLogin('test/etc/http/home', 'test/etc/http/login-error');
     }
 
     public function testLoginBadExportHttpResponse() {
-        $this->expectException(LetterboxdException::class, 'Cannot read export: Received HTTP 400');
+        $this->expectException(LetterboxdException::class);
+        $this->expectExceptionMessage('Cannot read export: Received HTTP 400');
         $this->assertLogin([
             $this->getResponse('test/etc/http/home'),
             $this->getResponse('HTTP/1.1 400 Bad Request')
@@ -162,7 +181,8 @@ class CalendarRendererTest extends TestCase {
     }
 
     public function testLoginBadExportData() {
-        $this->expectException(LetterboxdException::class, 'Cannot read export: Did not respond with a ZIP file');
+        $this->expectException(LetterboxdException::class);
+        $this->expectExceptionMessage('Cannot read export: Did not respond with a ZIP file');
         $this->assertLogin([
             $this->getResponse('test/etc/http/home'),
             $this->getResponse('HTTP/1.1 200 OK')
@@ -180,7 +200,7 @@ class CalendarRendererTest extends TestCase {
             'output' => array(
                 'headers' => false,
             ),
-            'file' => 'test/etc/diary.csv',
+            'file' => 'test/etc/diary-with-reviews.csv',
         ));
 
         $expected = trim(file_get_contents('test/etc/events.ics'));
@@ -193,17 +213,19 @@ class CalendarRendererTest extends TestCase {
             'file' => '/missing/file',
         ));
 
-        $this->expectException(LetterboxdException::class, 'Cannot find event file');
+        $this->expectException(LetterboxdException::class);
+        $this->expectExceptionMessage('Cannot find file');
         $renderer->loadEvents();
     }
 
     public function testInvalidZip() {
         $renderer = new CalendarRenderer(array(
             'log' => $this->log,
-            'file' => 'zip://test/etc/diary.zip#missing.csv',
+            'file' => 'zip://test/etc/fake.zip#missing.csv',
         ));
 
-        $this->expectException(LetterboxdException::class, 'Cannot find event file');
+        $this->expectException(LetterboxdException::class);
+        $this->expectExceptionMessage('Cannot find file');
         $renderer->loadEvents();
     }
 
@@ -216,7 +238,7 @@ class CalendarRendererTest extends TestCase {
             ),
         ));
 
-        $this->assertStringStartsWith('Cannot find event file', (string) $renderer);
+        $this->assertStringStartsWith('Cannot find file', (string) $renderer);
     }
 
     public function testGetHeaders() {
