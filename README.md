@@ -5,7 +5,7 @@ diary in iCalendar format.
 
 ## How to install (Heroku)
 
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://www.heroku.com/deploy?template=https://github.com/cmbuckley/letterboxd-ics)
 
 The installation will prompt you to set the `LETTERBOXD_USERNAME` and `LETTERBOXD_PASSWORD` secrets.
 
